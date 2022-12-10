@@ -6,13 +6,10 @@ sys.path.append('../')
 
 from utils import *
 
-def cardinalDataGen(seed, toFile=False):
+def cardinalDataGen(seed, filename=''):
     random.seed(seed)
 
-    if toFile:
-        f = open("cardinal.txt", "w")
-    else:
-        f = StringFileInterface()
+    f = StringFileInterface(filename)
 
     for i in range(0, 20):
         # Size of the matrix
@@ -55,7 +52,7 @@ def cardinalDataGen(seed, toFile=False):
             else:
                 f.write('\nAnswer: middle\n\n') # This shouldn't happen
 
-    if toFile:
-        f.close()
-    else:
+    f.close()
+
+    if not(filename):
         return f.data

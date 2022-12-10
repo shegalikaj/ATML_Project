@@ -1,3 +1,3 @@
 from cardinalDataGen import *
 
-cardinalDataGen(1, True) # Writes to file
+cardinalDataGen(1, 'cardinal.txt') # Writes to file
