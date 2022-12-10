@@ -28,31 +28,36 @@ def cardinalDataGen(seed, filename=''):
         mat[yPos, xPos] = 1
 
         # Prompt
-        f.write('World:\n')
+        f.write('\n\nWorld:\n')
         f.write(np.array2string(mat))
+        f.write('\nAnswer: ')
         if xPos > m/2 - 0.5:
             if yPos > n/2 - 0.5:
-                f.write('\nAnswer: southeast\n\n')
+                answer = 'southeast'
             elif yPos < n/2 - 0.5:
-                f.write('\nAnswer: northeast\n\n')
+                answer = 'northeast'
             else:
-                f.write('\nAnswer: east\n\n')
+                answer = 'east'
         elif xPos < m/2 - 0.5:
             if yPos > n/2 - 0.5:
-                f.write('\nAnswer: southwest\n\n')
+                answer = 'southwest'
             elif yPos < n/2 - 0.5:
-                f.write('\nAnswer: northwest\n\n')
+                answer = 'northwest'
             else:
-                f.write('\nAnswer: west\n\n')
+                answer = 'west'
         else:
             if yPos > n/2 - 0.5:
-                f.write('\nAnswer: south\n\n')
+                answer = 'south'
             elif yPos < n/2 - 0.5:
-                f.write('\nAnswer: north\n\n')
+                answer = 'north'
             else:
-                f.write('\nAnswer: middle\n\n') # This shouldn't happen
+                answer = 'middle' # This shouldn't happen
+
+        if i < 20 - 1:
+            f.write(answer)
 
     f.close()
 
     if not(filename):
-        return f.data
+        # TODO: Extract expected answer and prompt from f.data
+        return (f.data, answer)

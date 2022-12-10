@@ -27,14 +27,19 @@ def spatialDataGen(seed, filename=''):
         mat[yPos, xPos] = 1
 
         # Prompt
-        f.write('World:\n')
+        f.write('\n\nWorld:\n')
         f.write(np.array2string(mat))
+        f.write('\nAnswer: ')
         if xPos > m/2:
-            f.write('\nAnswer: right\n\n')
+            answer = 'right'
         else:
-            f.write('\nAnswer: left\n\n')
+            answer = 'left'
+
+        if i < 20 - 1:
+            f.write(answer)
 
     f.close()
 
     if not(filename):
-        return f.data
+        # TODO: Extract expected answer and prompt from f.data
+        return (f.data, answer)
