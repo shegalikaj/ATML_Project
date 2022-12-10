@@ -1,4 +1,5 @@
 import numpy as np
+from scipy.ndimage.interpolation import rotate
 import random
 
 import sys
@@ -6,7 +7,8 @@ sys.path.append('../')
 
 from utils import *
 
-def cardinalDataGen(seed, filename=''):
+# TODO: Confirm if the rotation implementation is consistent with the paper
+def cardinalDataGen(seed, angle=0, filename=''):
     random.seed(seed)
 
     f = StringFileInterface(filename)
@@ -27,9 +29,13 @@ def cardinalDataGen(seed, filename=''):
         mat = np.zeros([n, m])
         mat[yPos, xPos] = 1
 
+        # Rotate the matrix by the angle provided
+        rotatedMat = rotate(mat, angle=angle, reshape=True)
+        rotatedMat[abs(rotatedMat) < 0.01] = 0
+
         # Prompt
         f.write('\n\nWorld:\n')
-        f.write(np.array2string(mat))
+        f.write(np.array2string(rotatedMat))
         f.write('\nAnswer: ')
         if xPos > m/2 - 0.5:
             if yPos > n/2 - 0.5:

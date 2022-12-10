@@ -34,4 +34,4 @@ def experimentWithSpatial():
 experimentWithSpatial()
 
 #(prompt, expectedAnswer) = spatialDataGen(1)
-#print(expectedAnswer)
+#print(prompt)

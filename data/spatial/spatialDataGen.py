@@ -1,4 +1,5 @@
 import numpy as np
+from scipy.ndimage.interpolation import rotate
 import random
 
 import sys
@@ -6,7 +7,8 @@ sys.path.append('../')
 
 from utils import *
 
-def spatialDataGen(seed, filename=''):
+# TODO: Confirm if the rotation implementation is consistent with the paper
+def spatialDataGen(seed, angle=0, filename=''):
     random.seed(seed)
 
     f = StringFileInterface(filename)
@@ -26,9 +28,13 @@ def spatialDataGen(seed, filename=''):
         mat = np.zeros([n, m])
         mat[yPos, xPos] = 1
 
+        # Rotate the matrix by the angle provided
+        rotatedMat = rotate(mat, angle=angle, reshape=False) # TODO: Should it be true?
+        rotatedMat[abs(rotatedMat) < 0.01] = 0
+
         # Prompt
         f.write('\n\nWorld:\n')
-        f.write(np.array2string(mat))
+        f.write(np.array2string(rotatedMat))
         f.write('\nAnswer: ')
         if xPos > m/2:
             answer = 'right'
