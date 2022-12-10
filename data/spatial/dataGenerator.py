@@ -23,7 +23,7 @@ for i in range(0, 20):
     mat[yPos, xPos] = 1
 
     # Prompt
-    f.write('World:')
+    f.write('World:\n')
     f.write(np.array2string(mat))
     if xPos > m/2:
         f.write('\nAnswer: right\n\n')
