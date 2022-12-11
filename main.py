@@ -2,7 +2,7 @@ import numpy as np
 import time
 
 import openai
-openai.api_key = "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"
+openai.api_key = ''
 
 import sys
 sys.path.append('./data/cardinal')
@@ -41,18 +41,20 @@ def evaluateInModel(modelNumber, prompt):
 # TODO: Experiment runner functions
 
 def experimentWithSpatial():
+    print('-' * 10)
+    print(f'Experiment with spatial data:')
     statistics = np.zeros([numModels, numTimesRepeatExperiment])
 
     for seed in range(numTimesRepeatExperiment):
         (prompt, expectedAnswer) = spatialDataGen(seed)
 
         for i in range(numModels):
-            print(f'Evaluating model {i}:')
             answer = evaluateInModel(i, prompt)
             statistics[i, seed] = (answer == expectedAnswer)
-            print(f'Expected: {expectedAnswer}, Actual: {answer}')
+            #print(f'Expected: {expectedAnswer}, Actual: {answer}')
 
     print(np.array2string(statistics))
+    print('-' * 10)
 
 # TODO: Running the experiments
 
