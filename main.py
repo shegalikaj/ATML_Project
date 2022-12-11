@@ -1,8 +1,9 @@
 import numpy as np
 import time
+import os
 
 import openai
-openai.api_key = ''
+openai.api_key = os.environ["OPENAI_API_KEY"]
 
 import sys
 sys.path.append('./data/cardinal')
