@@ -1,4 +1,8 @@
 import numpy as np
+import time
+
+import openai
+openai.api_key = "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"
 
 import sys
 sys.path.append('./data/cardinal')
@@ -11,8 +15,27 @@ numModels = 5
 numTimesRepeatExperiment = 10
 
 def evaluateInModel(modelNumber, prompt):
-    # TODO: Implement this function
-    return 'The answer'
+    # TODO: include GPT-2 models
+    if (modelNumber == 0):
+        # Run it on GPT-3
+        prompt = prompt.strip()
+        response = openai.Completion.create(
+            engine="text-davinci-002",
+            prompt=prompt,
+            temperature=1,
+            max_tokens=1,
+            top_p=0.85,
+            frequency_penalty=0.0,
+            presence_penalty=0.0,
+            logprobs=3
+        )
+        # Requests per minute limit: 60.000000 / min.
+        time.sleep(2)
+        return response['choices'][0]['text']
+
+    # else:
+        # Run it on GPT-2, models with different sizes
+    return '???'
 
 
 # TODO: Experiment runner functions
@@ -24,8 +47,10 @@ def experimentWithSpatial():
         (prompt, expectedAnswer) = spatialDataGen(seed)
 
         for i in range(numModels):
-            answer = evaluateInModel(0, prompt)
+            print(f'Evaluating model {i}:')
+            answer = evaluateInModel(i, prompt)
             statistics[i, seed] = (answer == expectedAnswer)
+            print(f'Expected: {expectedAnswer}, Actual: {answer}')
 
     print(np.array2string(statistics))
 

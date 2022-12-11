@@ -35,7 +35,7 @@ def spatialDataGen(seed, angle=0, filename=''):
         # Prompt
         f.write('\n\nWorld:\n')
         f.write(np.array2string(rotatedMat))
-        f.write('\nAnswer: ')
+        f.write('\nAnswer:')
         if xPos > m/2:
             answer = 'right'
         else:
