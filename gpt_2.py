@@ -3,6 +3,7 @@ from transformers import (
     GPT2Tokenizer,
 )
  
+
 tokenizer = GPT2Tokenizer.from_pretrained("gpt2")
 model = GPT2LMHeadModel.from_pretrained("gpt2")
  
@@ -33,6 +34,8 @@ input_ids = tokenizer.encode(
     add_space_before_punct_symbol=True
 )
  
+ # Check the documentation of function generate for any change in attributes. 
+ # https://huggingface.co/docs/transformers/main_classes/text_generation
 output_ids = model.generate(
     input_ids=input_ids,
     do_sample=True,
