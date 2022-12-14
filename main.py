@@ -1,7 +1,7 @@
 import numpy as np
 import time
 import os
-
+import pandas as pd
 import openai
 openai.api_key = os.environ["OPENAI_API_KEY"]
 
@@ -53,7 +53,29 @@ def experimentWithSpatial():
             answer = evaluateInModel(i, prompt)
             statistics[i, seed] = (answer == expectedAnswer)
             #print(f'Expected: {expectedAnswer}, Actual: {answer}')
+    print(np.array2string(statistics))
+    print('-' * 10)
 
+
+fields = ['color', 'hexadecimal','R', 'G', 'B']
+
+df = pd.read_csv('data/colours/extracted_colors.csv', usecols = fields, low_memory = True)
+df['RGB'] = list(zip(df.R, df.G, df.B))
+
+def experimentWithColors():
+    print('-' * 10)
+    print(f'Experiment with color data:')
+    statistics = np.zeros([numModels, numTimesRepeatExperiment])
+
+    for seed in range(numTimesRepeatExperiment):
+        (prompt, expectedAnswer, key_of_the_last_value) = color_generation(seed)
+        for i in range(numModels):
+            answer = evaluateInModel(i, prompt)
+            color = df.RGB[key_of_the_last_value]
+            print(f"The result from predicting the name of color with {the_last_value}")
+            print(f"\033[38;2;{color[0]};{color[1]};{color[2]}m")
+            print("\u2588" * 10, the_last_value + response['choices'][0]['text'])
+            statistics[i, seed] = (answer == expectedAnswer)
     print(np.array2string(statistics))
     print('-' * 10)
 
