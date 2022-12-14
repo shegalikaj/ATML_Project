@@ -8,12 +8,12 @@ sys.path.append('../')
 from utils import *
 
 # TODO: Confirm if the rotation implementation is consistent with the paper
-def cardinalDataGen(seed, angle=0, filename=''):
+def cardinalDataGen(seed, angle=0, filename='', numTrainingPoints=20):
     random.seed(seed)
 
     f = StringFileInterface(filename)
 
-    for i in range(0, 20):
+    for i in range(0, numTrainingPoints + 1):
         # Size of the matrix
         # It has to be odd times odd matrix
         m = 2 * random.randint(1, 3) + 1
@@ -59,7 +59,7 @@ def cardinalDataGen(seed, angle=0, filename=''):
             else:
                 answer = 'middle' # This shouldn't happen
 
-        if i < 20 - 1:
+        if i < numTrainingPoints:
             f.write(answer)
 
     f.close()

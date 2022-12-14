@@ -8,12 +8,12 @@ sys.path.append('../')
 from utils import *
 
 # TODO: Confirm if the rotation implementation is consistent with the paper
-def spatialDataGen(seed, angle=0, filename=''):
+def spatialDataGen(seed, angle=0, filename='', numTrainingPoints=20):
     random.seed(seed)
 
     f = StringFileInterface(filename)
 
-    for i in range(0, 20):
+    for i in range(0, numTrainingPoints + 1):
         # Size of the matrix
         m = random.randint(2, 4)
         n = random.randint(2, 4)
@@ -41,7 +41,7 @@ def spatialDataGen(seed, angle=0, filename=''):
         else:
             answer = 'left'
 
-        if i < 20 - 1:
+        if i < numTrainingPoints:
             f.write(answer)
 
     f.close()
