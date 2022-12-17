@@ -7,6 +7,8 @@ sys.path.append('../')
 
 from utils import *
 
+# TODO: GENERALISATION TO UNSEEN WORLDS - final question should have world that was not used.
+
 # TODO: Confirm if the rotation implementation is consistent with the paper
 def spatialDataGen(seed, angle=0, filename='', numTrainingPoints=20):
     random.seed(seed)
@@ -15,8 +17,8 @@ def spatialDataGen(seed, angle=0, filename='', numTrainingPoints=20):
 
     for i in range(0, numTrainingPoints + 1):
         # Size of the matrix
-        m = random.randint(2, 8)
-        n = random.randint(1, 8)
+        m = random.randint(2, 7)
+        n = random.randint(1, 7)
 
         # Position of the true value
         do = True
