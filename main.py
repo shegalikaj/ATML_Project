@@ -20,7 +20,7 @@ from color_main import color_generation
 numModels = 5
 numTimesRepeatExperiment = 10
 #models = (("gpt2",0),("gpt2-medium",0),("gpt2-large",0),("gpt2-xl",0),("gpt3",1))
-models = [("gpt3",1),("gpt2",0),("gpt2-medium",0)]
+models = [("gpt2",0)]
 print("Experiments to text")
 print(models)
 
@@ -44,7 +44,7 @@ def evaluateInModel(modelNumber,model ,prompt,tokenizer=None):
             top_p=0.85,
             frequency_penalty=0.0,
             presence_penalty=0.0,
-            #logprobs=3
+            logprobs=3,
             best_of=5,
             n=3
         )
@@ -62,8 +62,7 @@ def evaluateInModel(modelNumber,model ,prompt,tokenizer=None):
         input_ids = tokenizer.encode(
             prompt,
             add_special_tokens=False,
-            return_tensors="pt",
-            add_space_before_punct_symbol=True
+            return_tensors="pt"
         )
         
         # Check the documentation of function generate for any change in attributes. 
@@ -73,7 +72,8 @@ def evaluateInModel(modelNumber,model ,prompt,tokenizer=None):
             do_sample=True,
             # max_length=10,  # desired output sentence length
             pad_token_id=model.config.eos_token_id,
-            max_new_tokens=1
+            max_new_tokens=5,
+            top_k=3
         )[0].tolist()
 
         generated_text = tokenizer.decode(
@@ -82,6 +82,7 @@ def evaluateInModel(modelNumber,model ,prompt,tokenizer=None):
 
 
         # Run it on GPT-2, models with different sizes
+        generated_text=print(generated_text.replace(prompt, ''))
         return generated_text
     
     return "Error"
@@ -125,19 +126,22 @@ def run_experiment(numTimesRepeatExperiment,models,type_expermients=["grid"]):
 
                 elif type_exp=="color":
                     (prompt, s, expectedAnswer) = color_generation(seeds[experiment], df)
-                    print(prompt)
-                    print("=========")
+                    #print(prompt)
+                    #print("=========")
                     expectedAnswer  = df.color[expectedAnswer]
-                    print(expectedAnswer)
-                    print("--------------------")
+                    #print(expectedAnswer)
+                    #print("--------------------")
                     # print(expectedAnswer)
                 elif type_exp == "cardinal":
                     (prompt, expectedAnswer) = cardinalDataGen(seeds[experiment])
 
-                #experiment
+            #experiment
             print(f"model: {model_to_eval[0]},exp: {k}, type: {type_exp}  ")
             #print(f"prompt: {prompt}")
             answer = evaluateInModel(model_to_eval[1],model ,prompt,tokenizer)
+
+
+
             print(f"{model_to_eval[0]} ans: {answer}, real ans:{expectedAnswer}")
 
 
