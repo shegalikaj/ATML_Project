@@ -8,19 +8,26 @@ from transformers import (
     GPT2Tokenizer,
 ) 
 import sys
-openai.api_key = "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"
+openai.api_key = "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"
 
 sys.path.append('./data/cardinal')
 sys.path.append('./data/spatial')
 sys.path.append('./data')
 from cardinalDataGen import cardinalDataGen
 from spatialDataGen import spatialDataGen
+from color_main import color_generation
 
 numModels = 5
 numTimesRepeatExperiment = 10
 #models = (("gpt2",0),("gpt2-medium",0),("gpt2-large",0),("gpt2-xl",0),("gpt3",1))
-models = (("gpt2",0),("gpt3",1))
+models = [("gpt3",1),("gpt2",0),("gpt2-medium",0)]
+print("Experiments to text")
+print(models)
 
+fields = ['color', 'hexadecimal','R', 'G', 'B']
+
+df = pd.read_csv('data/colours/extracted_colors.csv', usecols = fields, low_memory = True)
+df['RGB'] = list(zip(df.R, df.G, df.B))
 
 
 def evaluateInModel(modelNumber,model ,prompt,tokenizer=None):
@@ -33,14 +40,17 @@ def evaluateInModel(modelNumber,model ,prompt,tokenizer=None):
             engine="text-davinci-002",
             prompt=prompt,
             temperature=1,
-            max_tokens=1,
+            max_tokens=5,
             top_p=0.85,
             frequency_penalty=0.0,
             presence_penalty=0.0,
-            logprobs=3
+            #logprobs=3
+            best_of=5,
+            n=3
         )
         # Requests per minute limit: 60.000000 / min.
         time.sleep(2)
+        #return response['choices'][0]['text']
         return response['choices'][0]['text']
 
     elif (modelNumber == 0) :
@@ -77,93 +87,60 @@ def evaluateInModel(modelNumber,model ,prompt,tokenizer=None):
     return "Error"
 
 
-# # TODO: Experiment runner functions
-
-def experimentWithSpatial():
-    print('-' * 10)
-    print(f'Experiment with spatial data:')
-    statistics = np.zeros([numModels, numTimesRepeatExperiment])
-    openai.Completion
-
-    for seed in range(numTimesRepeatExperiment):
-        (prompt, expectedAnswer) = spatialDataGen(seed)
-
-        #for i in range(numModels):
-            #answer = evaluateInModel(i, prompt)
-            #statistics[i, seed] = (answer == expectedAnswer)
-            #print(f'Expected: {expectedAnswer}, Actual: {answer}')
-    print(np.array2string(statistics))
-    print('-' * 10)
-
-
-fields = ['color', 'hexadecimal','R', 'G', 'B']
-
-df = pd.read_csv('data/colours/extracted_colors.csv', usecols = fields, low_memory = True)
-df['RGB'] = list(zip(df.R, df.G, df.B))
-
-def experimentWithColors():
-    print('-' * 10)
-    print(f'Experiment with color data:')
-    statistics = np.zeros([numModels, numTimesRepeatExperiment])
-
-    for seed in range(numTimesRepeatExperiment):
-        (prompt, expectedAnswer, key_of_the_last_value) = color_generation(seed)
-        for i in range(numModels):
-            answer = evaluateInModel(i, prompt)
-            color = df.RGB[key_of_the_last_value]
-            print(f"The result from predicting the name of color with {the_last_value}")
-            print(f"\033[38;2;{color[0]};{color[1]};{color[2]}m")
-            print("\u2588" * 10, the_last_value + response['choices'][0]['text'])
-            statistics[i, seed] = (answer == expectedAnswer)
-    print(np.array2string(statistics))
-    print('-' * 10)
-
-# # TODO: Running the experiments
-
 
 
 
 # #(prompt, expectedAnswer) = spatialDataGen(1)
 # #print(prompt)
 
-def run_experiment(numTimesRepeatExperiment,models,type_exp="grid"):
+def run_experiment(numTimesRepeatExperiment,models,type_expermients=["grid"]):
     
     tokenizer=None
     loaded_model=None
     statistics = np.zeros([len(models), numTimesRepeatExperiment])
     seeds=list(range(numTimesRepeatExperiment))
 
+    result_collector = []
 
 
-    for k,model_to_eval in enumerate(models):
+    for type_exp in type_expermients:
 
-        if model_to_eval[1]==0 : #GPT2 model
-            tokenizer = GPT2Tokenizer.from_pretrained(model_to_eval[0])
-            model = GPT2LMHeadModel.from_pretrained(model_to_eval[0])
-
+        for k,model_to_eval in enumerate(models):
             
-        else: #model[1]==1 #GPT3 model
-            model = openai.Completion
-            pass
-        
-        
-        for experiment in range(numTimesRepeatExperiment):
+            print(model_to_eval)
+            if model_to_eval[1]==0 : #GPT2 model
+                tokenizer = GPT2Tokenizer.from_pretrained(model_to_eval[0])
+                model = GPT2LMHeadModel.from_pretrained(model_to_eval[0])
 
-            if type_exp=="grid":
-                (prompt, expectedAnswer) = spatialDataGen(seeds[experiment])
+                
+            else: #model[1]==1 #GPT3 model
+                model = openai.Completion
+                pass
+            
+            
+            for experiment in range(numTimesRepeatExperiment):
 
-            elif type_exp=="color":
-                (prompt, expectedAnswer) = spatialDataGen(seeds[experiment])
-        
-            elif type_exp == "cardinal":
-                (prompt, expectedAnswer) = cardinalDataGen(seeds[experiment])
+                if type_exp=="grid":
+                    (prompt, expectedAnswer) = spatialDataGen(seeds[experiment])
 
-            #experiment
-        print(f"model: {model_to_eval[0]},exp: {k}, type: {type_exp}  ")
-        #print(f"prompt: {prompt}")
-        answer = evaluateInModel(model_to_eval[1],model ,prompt,tokenizer)
-        print(f"{model_to_eval[0]} ans: {answer}, real ans:{expectedAnswer}")
+                elif type_exp=="color":
+                    (prompt, s, expectedAnswer) = color_generation(seeds[experiment], df)
+                    print(prompt)
+                    print("=========")
+                    expectedAnswer  = df.color[expectedAnswer]
+                    print(expectedAnswer)
+                    print("--------------------")
+                    # print(expectedAnswer)
+                elif type_exp == "cardinal":
+                    (prompt, expectedAnswer) = cardinalDataGen(seeds[experiment])
 
-run_experiment(numTimesRepeatExperiment,models,"grid")
+                #experiment
+            print(f"model: {model_to_eval[0]},exp: {k}, type: {type_exp}  ")
+            #print(f"prompt: {prompt}")
+            answer = evaluateInModel(model_to_eval[1],model ,prompt,tokenizer)
+            print(f"{model_to_eval[0]} ans: {answer}, real ans:{expectedAnswer}")
+
+
+run_experiment(numTimesRepeatExperiment,models,["color"])
 
             

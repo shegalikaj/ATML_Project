@@ -76,7 +76,7 @@ def color_generation(seed, df):
     color_keys = [i for i in range(len(df.color))]
     samples = []
     key_of_the_last_value = None
-    for key, value in enumerate(random.choices(color_keys, k=60)): 
+    for key, value in enumerate(random.sample(color_keys, k=60)): 
         if key < 59: 
             samples.append("RGB: {} Answer: {}".format(df.RGB[value], df.color[value]))
     else: 
