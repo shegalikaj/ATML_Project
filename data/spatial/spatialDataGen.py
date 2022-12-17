@@ -7,17 +7,13 @@ sys.path.append('../')
 
 from utils import *
 
-# TODO: GENERALISATION TO UNSEEN CONCEPTS -
-
-
-# This is for 'GENERALISATION TO UNSEEN WORLDS'
-def spatialDataGen(seed, angle=0, filename='', numTrainingPoints=20):
+def spatialDataGen(seed, angle=0, filename='', numTrainingPoints=20, unseenConcept=''):
     random.seed(seed)
 
     f = StringFileInterface(filename)
 
     for i in range(0, numTrainingPoints + 1):
-        rotatedMat, answer = generateUniqueWorldAndAnswer(f, angle)
+        rotatedMat, answer = generateUniqueWorldAndAnswer(f, angle, unseenConcept)
 
         # Prompt
         f.write('\n\nWorld:\n')
@@ -30,10 +26,9 @@ def spatialDataGen(seed, angle=0, filename='', numTrainingPoints=20):
     f.close()
 
     if not(filename):
-        # TODO: Extract expected answer and prompt from f.data
         return (f.data, answer)
 
-def generateUniqueWorldAndAnswer(f, angle):
+def generateUniqueWorldAndAnswer(f, angle, unseenConcept='', generateForUnseenConcept=False):
     # Size of the matrix
     m = random.randint(2, 7)
     n = random.randint(1, 7)
@@ -57,10 +52,13 @@ def generateUniqueWorldAndAnswer(f, angle):
     else:
         answer = 'left'
 
-    # Confirm if the rotatedMat is already present in 'f';
-    # If it is, recursively call and return this function
-    ## Is np.array2string(rotatedMat) present in f.data ?
-    if (np.array2string(rotatedMat) in f.data):
-        return generateUniqueWorldAndAnswer(f, angle)
+    # Recursively call and return function if:
+    # 1. rotatedMat is already present in 'f.data'
+    # 2. answer is unseen concept and we are not generating for unseen concept
+    # 3. answer is not unseen concept and we are generating for unseen concept
+    if ((np.array2string(rotatedMat) in f.data)
+            or (answer == unseenConcept and ~generateForUnseenConcept)
+            or (answer != unseenConcept and generateForUnseenConcept)):
+        return generateUniqueWorldAndAnswer(f, angle, unseenConcept, generateForUnseenConcept)
 
     return rotatedMat, answer

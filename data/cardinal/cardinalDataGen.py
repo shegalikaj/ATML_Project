@@ -65,5 +65,4 @@ def cardinalDataGen(seed, angle=0, filename='', numTrainingPoints=20):
     f.close()
 
     if not(filename):
-        # TODO: Extract expected answer and prompt from f.data
         return (f.data, answer)
