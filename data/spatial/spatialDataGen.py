@@ -15,14 +15,14 @@ def spatialDataGen(seed, angle=0, filename='', numTrainingPoints=20):
 
     for i in range(0, numTrainingPoints + 1):
         # Size of the matrix
-        m = random.randint(2, 4)
-        n = random.randint(2, 4)
+        m = random.randint(2, 8)
+        n = random.randint(1, 8)
 
         # Position of the true value
         do = True
         while do: # Just to ensure that xPos is not at the middle
             xPos = random.randint(0, m - 1)
-            do = (xPos == m/2)
+            do = (xPos == m/2 - 0.5)
         yPos = random.randint(0, n - 1)
 
         mat = np.zeros([n, m])

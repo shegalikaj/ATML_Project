@@ -24,7 +24,7 @@ def cardinalDataGen(seed, angle=0, filename='', numTrainingPoints=20):
         while do: # Just to ensure that xPos, yPos is not at the middle
             xPos = random.randint(0, m - 1)
             yPos = random.randint(0, n - 1)
-            do = ((xPos == m/2) and (yPos == n/2))
+            do = ((xPos == m/2 - 0.5) and (yPos == n/2 - 0.5))
 
         mat = np.zeros([n, m])
         mat[yPos, xPos] = 1
