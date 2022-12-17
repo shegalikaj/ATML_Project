@@ -19,7 +19,7 @@ def cardinalDataGen(seed, angle=0, filename='', numTrainingPoints=20, unseenConc
         f.write('\nAnswer:')
         f.write(answer)
 
-    mat, answer = generateUniqueCardinalWorldAndAnswer(f, angle, unseenConcept, unseenConcept != '')
+    mat, answer = generateUniqueCardinalWorldAndAnswer(f, angle, unseenConcept, True)
     f.write('\n\nWorld:\n')
     f.write(np.array2string(mat))
     f.write('\nAnswer:')
@@ -30,6 +30,9 @@ def cardinalDataGen(seed, angle=0, filename='', numTrainingPoints=20, unseenConc
         return (f.data, answer)
 
 def generateUniqueCardinalWorldAndAnswer(f, angle, unseenConcept='', generateForUnseenConcept=False):
+    if unseenConcept == '':
+        generateForUnseenConcept = False
+
     # Size of the matrix
     # It has to be odd times odd matrix
     m = 2 * random.randint(1, 3) + 1
