@@ -12,23 +12,23 @@ def spatialDataGen(seed, angle=0, filename='', numTrainingPoints=20, unseenConce
 
     f = StringFileInterface(filename)
 
-    for i in range(0, numTrainingPoints + 1):
-        rotatedMat, answer = generateUniqueWorldAndAnswer(f, angle, unseenConcept)
-
-        # Prompt
+    for i in range(0, numTrainingPoints):
+        mat, answer = generateUniqueSpatialWorldAndAnswer(f, angle, unseenConcept, False)
         f.write('\n\nWorld:\n')
-        f.write(np.array2string(rotatedMat))
+        f.write(np.array2string(mat))
         f.write('\nAnswer:')
 
-        if i < numTrainingPoints:
-            f.write(answer)
+    mat, answer = generateUniqueSpatialWorldAndAnswer(f, angle, unseenConcept, True)
+    f.write('\n\nWorld:\n')
+    f.write(np.array2string(mat))
+    f.write('\nAnswer:')
 
     f.close()
 
     if not(filename):
         return (f.data, answer)
 
-def generateUniqueWorldAndAnswer(f, angle, unseenConcept='', generateForUnseenConcept=False):
+def generateUniqueSpatialWorldAndAnswer(f, angle, unseenConcept='', generateForUnseenConcept=False):
     # Size of the matrix
     m = random.randint(2, 7)
     n = random.randint(1, 7)
@@ -59,6 +59,8 @@ def generateUniqueWorldAndAnswer(f, angle, unseenConcept='', generateForUnseenCo
     if ((np.array2string(rotatedMat) in f.data)
             or (answer == unseenConcept and ~generateForUnseenConcept)
             or (answer != unseenConcept and generateForUnseenConcept)):
-        return generateUniqueWorldAndAnswer(f, angle, unseenConcept, generateForUnseenConcept)
+        return generateUniqueSpatialWorldAndAnswer(f, angle, unseenConcept, generateForUnseenConcept)
+    # TODO: This can be done better.
+    # Running it recursively until we find something that works for us is inefficient.
 
     return rotatedMat, answer
