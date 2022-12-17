@@ -73,12 +73,6 @@ def check_euclidian_distance(color_1, color_2, df):
 
 def sub_space_color_generation(seed, df, rgb_random_color, rotation_by_90_degree=False, rotation_random=False):
     primary_secondary_colors = [ "RGB:(255, 0, 0) Answer:red",  "RGB:(0,255,0) Answer:green", "RGB:(0,0,255) Answer:blue", "RGB:(255,255,0) Answer:yellow",  "RGB:(0,255,255) Answer:cyan", "RGB:(255,0,255) Answer:magenta"]
-    
-    # random_color = random.sample(primary_secondary_colors, k=1)[0]
-    # match = re.search(r"\((\d+,\s*\d+,\s*\d+)\)", random_color)
-    # value = match.group(1)
-    # parts = value.split(",")
-    # rgb_random_color = tuple(int(x.strip()) for x in parts) 
         
     filtered_color_population = list(filter(lambda x: check_euclidian_distance(x, rgb_random_color, df), df.RGB))[:57]
     color_to_be_predict = random.sample(list(set(df.RGB)-set(filtered_color_population)), k=1)[0]
