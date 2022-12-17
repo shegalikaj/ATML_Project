@@ -18,7 +18,7 @@ def spatialDataGen(seed, angle=0, filename='', numTrainingPoints=20, unseenConce
         f.write(np.array2string(mat))
         f.write('\nAnswer:')
 
-    mat, answer = generateUniqueSpatialWorldAndAnswer(f, angle, unseenConcept, True)
+    mat, answer = generateUniqueSpatialWorldAndAnswer(f, angle, unseenConcept, unseenConcept != '')
     f.write('\n\nWorld:\n')
     f.write(np.array2string(mat))
     f.write('\nAnswer:')

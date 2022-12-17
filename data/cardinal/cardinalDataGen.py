@@ -19,7 +19,7 @@ def cardinalDataGen(seed, angle=0, filename='', numTrainingPoints=20, unseenConc
         f.write('\nAnswer:')
         f.write(answer)
 
-    mat, answer = generateUniqueCardinalWorldAndAnswer(f, angle, unseenConcept, True)
+    mat, answer = generateUniqueCardinalWorldAndAnswer(f, angle, unseenConcept, unseenConcept != '')
     f.write('\n\nWorld:\n')
     f.write(np.array2string(mat))
     f.write('\nAnswer:')
