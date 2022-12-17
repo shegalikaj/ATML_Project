@@ -18,8 +18,6 @@ fields = ['color', 'hexadecimal','R', 'G', 'B']
 df = pd.read_csv('extracted_colors.csv', usecols = fields, low_memory = True)
 df['RGB'] = list(zip(df.R, df.G, df.B))
 
-
-
 def rotate(point, degree): 
     # Define the rotation matrix
     # rotate in Z
