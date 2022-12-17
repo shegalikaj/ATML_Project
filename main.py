@@ -1,4 +1,3 @@
-##########TEST!
 import numpy as np
 import time
 import os
@@ -14,9 +13,10 @@ openai.api_key = "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"
 sys.path.append('./data/cardinal')
 sys.path.append('./data/spatial')
 sys.path.append('./data')
-from cardinalDataGen import cardinalDataGen
-from spatialDataGen import spatialDataGen
-from color_main import color_generation
+
+from data.cardinal.cardinalDataGen import cardinalDataGen
+from data.spatial.spatialDataGen import spatialDataGen
+from data.colours.colorDataGen import color_generation
 
 numModels = 5
 numTimesRepeatExperiment = 10
