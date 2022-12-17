@@ -3,13 +3,11 @@ class StringFileInterface:
         self.toFile = bool(filename)
         if self.toFile:
             self.f = open(filename, "w")
-        else:
-            self.data = ''
+        self.data = ''
     def write(self, str):
         if self.toFile:
             self.f.write(str)
-        else:
-            self.data += str
+        self.data += str
 
     def close(self):
         if self.toFile:
