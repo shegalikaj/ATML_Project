@@ -42,7 +42,7 @@ def spatialDataGen(seed, angle=0, filename='', numTrainingPoints=20, unseenConce
     f.close()
 
     if not(filename):
-        return (f.data, answer)
+        return (f.data.strip(), answer)
 
 def generateUniqueSpatialWorldAndAnswer(f, angle, answerValues, unseenConcept='', generateForUnseenConcept=True):
     if unseenConcept == '':

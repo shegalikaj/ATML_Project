@@ -38,7 +38,7 @@ def cardinalDataGen(seed, angle=0, filename='', numTrainingPoints=20, unseenConc
     f.close()
 
     if not(filename):
-        return (f.data, answer)
+        return (f.data.strip(), answer)
 
 def generateUniqueCardinalWorldAndAnswer(f, angle, unseenConcept='', generateForUnseenConcept=False):
     if unseenConcept == '':
