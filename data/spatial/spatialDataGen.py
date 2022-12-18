@@ -48,7 +48,7 @@ def generateUniqueSpatialWorldAndAnswer(f, angle, unseenConcept='', generateForU
 
     # Rotate the matrix by the angle provided
     rotatedMat = rotate(mat, angle=angle, reshape=False) # TODO: Should it be true?
-    rotatedMat[abs(rotatedMat) < 0.01] = 0
+    rotatedMat = rotatedMat.round(2)
 
     if xPos > m/2:
         answer = 'right'
