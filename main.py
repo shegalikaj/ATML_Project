@@ -23,6 +23,8 @@ from data.cardinal.cardinalDataGen import cardinalDataGen,cardinalSubspaceDataGe
 from data.spatial.spatialDataGen import spatialDataGen
 from data.colours.colorDataGen import sub_space_color_generation,random_split_color_generation
 
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
 numModels = 5
 numTimesRepeatExperiment = 1
 #models = (("gpt2",0),("gpt2-medium",0),("gpt2-large",0),("gpt2-xl",0),("gpt3",1))
@@ -38,10 +40,6 @@ df['RGB'] = list(zip(df.R, df.G, df.B))
 
 def evaluateInModel(modelNumber,model ,prompt,real_ans,tokenizer=None,):
     # TODO: include GPT-2 model
-
-                    # Set device to GPU if available, otherwise use CPU
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
 
 
 
@@ -178,8 +176,6 @@ def check_outputs(response,prompt,exp_ans,mod_num):
 
 def run_experiment_B1(numTimesRepeatExperiment,models):
     print("Experiment for {numTimesRepeatExperiment} rounds")
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    print(device)
 
     tokenizer=None
     loaded_model=None
