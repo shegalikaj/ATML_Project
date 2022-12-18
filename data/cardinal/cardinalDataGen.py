@@ -139,7 +139,7 @@ def cardinalGenPointOfType(type, angle):
         # xPos < m/2 - 0.5:
         # yPos > n/2 - 0.5:
         xPos = random.randint(0, math.floor(m/2) - 1)
-        yPos = random.randint(math.ceil(n/2), n)
+        yPos = random.randint(math.ceil(n/2), n - 1)
     elif type == 'northwest':
         # xPos < m/2 - 0.5:
         # yPos < n/2 - 0.5:
