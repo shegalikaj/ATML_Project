@@ -6,13 +6,14 @@ import openai
 import random
 import re
 import csv
+import torch
 from transformers import (
     GPT2LMHeadModel,
     GPT2Tokenizer,
     set_seed
 ) 
 import sys
-openai.api_key = "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"
+openai.api_key = ""
 
 sys.path.append('./data/cardinal')
 sys.path.append('./data/spatial')
@@ -36,7 +37,13 @@ df['RGB'] = list(zip(df.R, df.G, df.B))
 
 
 def evaluateInModel(modelNumber,model ,prompt,real_ans,tokenizer=None,):
-    # TODO: include GPT-2 models
+    # TODO: include GPT-2 model
+
+                    # Set device to GPU if available, otherwise use CPU
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+
+
 
     if (modelNumber == 1):
         # Run it on GPT-3
@@ -66,12 +73,20 @@ def evaluateInModel(modelNumber,model ,prompt,real_ans,tokenizer=None,):
          # gpt2     # 12-layer, 768-hidden, 12-heads, 117M parameters.
                     # OpenAI GPT-2 English model
         #print(prompt)
+
+        # Generate some text using the model
+        # input_ids = torch.tensor(tokenizer.encode(prompt, return_tensors='pt')).to(device)
+        # output = model.generate(input_ids, max_length=100, temperature=0.7, top_p=0.9, num_return_sequences=1)
+        # output_text = tokenizer.decode(output[0], skip_special_tokens=True)
+
+
+
         input_ids = tokenizer.encode(
             prompt,
             add_special_tokens=False,
             return_tensors="pt",
             max_length=3072
-        )
+        ).to(device)
         # print(f"len_promt{len(prompt)}")
         # print("input_IDS")
         
@@ -163,6 +178,8 @@ def check_outputs(response,prompt,exp_ans,mod_num):
 
 def run_experiment_B1(numTimesRepeatExperiment,models):
     print("Experiment for {numTimesRepeatExperiment} rounds")
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    print(device)
     
     tokenizer=None
     loaded_model=None
@@ -180,8 +197,12 @@ def run_experiment_B1(numTimesRepeatExperiment,models):
         
         #print(model_to_eval)
         if model_to_eval[1]==0 : #GPT2 model
+            
+            
+
+
+            model = GPT2LMHeadModel.from_pretrained(model_to_eval[0]).to(device)
             tokenizer = GPT2Tokenizer.from_pretrained(model_to_eval[0])
-            model = GPT2LMHeadModel.from_pretrained(model_to_eval[0])
 
             
         else: #model[1]==1 #GPT3 model
