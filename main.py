@@ -8,7 +8,7 @@ from transformers import (
     GPT2LMHeadModel,
     GPT2Tokenizer,
     set_seed
-) 
+)
 import sys
 openai.api_key = "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"
 
@@ -60,15 +60,15 @@ def evaluateInModel(modelNumber,model ,prompt,tokenizer=None):
          # gpt2     # 12-layer, 768-hidden, 12-heads, 117M parameters.
                     # OpenAI GPT-2 English model
 
-        
+
         prompt = prompt.strip()
         input_ids = tokenizer.encode(
             prompt,
             add_special_tokens=False,
             return_tensors="pt"
         )
-        
-        # Check the documentation of function generate for any change in attributes. 
+
+        # Check the documentation of function generate for any change in attributes.
         # https://huggingface.co/docs/transformers/main_classes/text_generation
         output_ids = model.generate(
             input_ids=input_ids,
@@ -85,7 +85,7 @@ def evaluateInModel(modelNumber,model ,prompt,tokenizer=None):
         # generated_text = tokenizer.decode(
         #     output_ids,
         #     clean_up_tokenization_spaces=True)
-        
+
         print("_____top3____")
         generated_sequences = [tokenizer.decode(s.tolist(), skip_special_tokens=True) for s in output_ids] #clean_up_tokenization_spaces=True)
         for seq in generated_sequences:
@@ -95,7 +95,7 @@ def evaluateInModel(modelNumber,model ,prompt,tokenizer=None):
         # Run it on GPT-2, models with different sizes
        # generated_text=generated_text.replace(prompt, '')
         return "HEY"#generated_sequences[0].replace(prompt, '')
-    
+
     return "Error"
 
 
@@ -108,7 +108,7 @@ def evaluateInModel(modelNumber,model ,prompt,tokenizer=None):
 
 
 def run_experiment_B1(numTimesRepeatExperiment,models,type_expermients=["colour"]):
-    
+
     tokenizer=None
     loaded_model=None
     statistics = np.zeros([len(models), numTimesRepeatExperiment])
@@ -124,13 +124,13 @@ def run_experiment_B1(numTimesRepeatExperiment,models,type_expermients=["colour"
 
 
     for k,model_to_eval in enumerate(models):
-        
+
         print(model_to_eval)
         if model_to_eval[1]==0 : #GPT2 model
             tokenizer = GPT2Tokenizer.from_pretrained(model_to_eval[0])
             model = GPT2LMHeadModel.from_pretrained(model_to_eval[0])
 
-            
+
         else: #model[1]==1 #GPT3 model
             model = openai.Completion
             pass
@@ -138,19 +138,19 @@ def run_experiment_B1(numTimesRepeatExperiment,models,type_expermients=["colour"
             for sp in split:
 
                 for rot in rotation :
-                
+
                     for experiment in range(numTimesRepeatExperiment):
                         set_seed(experiment)
 
                         prompt,s,expectedAnswer = None
 
 
-                        if  sp=="random": 
-                            if      rotation    ==  "None"  : 
+                        if  sp=="random":
+                            if      rotation    ==  "None"  :
                                 ( prompt,s,expectedAnswer) = random_split_color_generation(experiment,df,rotation_by_90_degree=False, rotation_random=False)
-                            elif    rotation    ==  "90"    :  
+                            elif    rotation    ==  "90"    :
                                 ( prompt,s,expectedAnswer) = random_split_color_generation(experiment,df,rotation_by_90_degree=True, rotation_random=False)
-                            elif    rotation    ==  "Random":   
+                            elif    rotation    ==  "Random":
                                 ( prompt,s,expectedAnswer) =  random_split_color_generation(experiment,df,rotation_by_90_degree=False, rotation_random=True)
 
                         elif sp == "subspace":
@@ -168,7 +168,7 @@ def run_experiment_B1(numTimesRepeatExperiment,models,type_expermients=["colour"
                         print(f"{model_to_eval[0]} ans: {answer}, real ans:{expectedAnswer}, time:{end - start}")
 
 def run_experiment_B2(numTimesRepeatExperiment,models,type_expermients=["colour,B2"]):
-    
+
     tokenizer=None
     loaded_model=None
     statistics = np.zeros([len(models), numTimesRepeatExperiment])
@@ -183,13 +183,13 @@ def run_experiment_B2(numTimesRepeatExperiment,models,type_expermients=["colour,
 
 
     for k,model_to_eval in enumerate(models):
-        
+
         print(model_to_eval)
         if model_to_eval[1]==0 : #GPT2 model
             tokenizer = GPT2Tokenizer.from_pretrained(model_to_eval[0])
             model = GPT2LMHeadModel.from_pretrained(model_to_eval[0])
 
-            
+
         else: #model[1]==1 #GPT3 model
             model = openai.Completion
             pass
@@ -199,7 +199,7 @@ def run_experiment_B2(numTimesRepeatExperiment,models,type_expermients=["colour,
             for gtu in gen_to_unsee:
 
                 for rot in rotation :
-                
+
                     for experiment in range(numTimesRepeatExperiment):
                         set_seed(experiment)
 
@@ -210,18 +210,18 @@ def run_experiment_B2(numTimesRepeatExperiment,models,type_expermients=["colour,
                                 if      rotation    ==  "None"  :   (prompt, expectedAnswer) = spatialDataGen(experiment, angle=0, filename='', numTrainingPoints=20, unseenConcept='')
                                 elif    rotation    ==  "90"    :   (prompt, expectedAnswer) = spatialDataGen(experiment, angle=90, filename='', numTrainingPoints=20, unseenConcept='')
                                 elif    rotation    ==  "Random":   (prompt, expectedAnswer) = spatialDataGen(experiment, angle=random.randint(0,360), filename='', numTrainingPoints=20, unseenConcept='')
-                            
+
                             elif  gtu=="concept":
                                 if      rotation    ==  "None"  :   (prompt, expectedAnswer) = spatialDataGen(experiment, angle=0, filename='', numTrainingPoints=20, unseenConcept='concept')
                                 elif    rotation    ==  "90"    :   (prompt, expectedAnswer) = spatialDataGen(experiment, angle=90, filename='', numTrainingPoints=20, unseenConcept='concept')
                                 elif    rotation    ==  "Random":   (prompt, expectedAnswer) = spatialDataGen(experiment, angle=random.randint(1,360), filename='', numTrainingPoints=20, unseenConcept='concept')
-                        
+
                         elif type_exp == "cardinal":
                             if gtu=="world":
                                 if      rotation    ==  "None"  :   (prompt, expectedAnswer) = cardinalDataGen(experiment, angle=0, filename='', numTrainingPoints=20, unseenConcept='')
                                 elif    rotation    ==  "90"    :   (prompt, expectedAnswer) = cardinalDataGen(experiment, angle=90, filename='', numTrainingPoints=20, unseenConcept='')
                                 elif    rotation    ==  "Random":   (prompt, expectedAnswer) = cardinalDataGen(experiment, angle=random.randint(1,360), filename='', numTrainingPoints=20, unseenConcept='')
-                            
+
                             elif  gtu=="concept":
                                 if      rotation    ==  "None"  :   (prompt, expectedAnswer) = cardinalDataGen(experiment, angle=0, filename='', numTrainingPoints=20, unseenConcept='concept')
                                 elif    rotation    ==  "90"    :   (prompt, expectedAnswer) = cardinalDataGen(experiment, angle=90, filename='', numTrainingPoints=20, unseenConcept='concept')
@@ -232,7 +232,7 @@ def run_experiment_B2(numTimesRepeatExperiment,models,type_expermients=["colour,
                             elif    gtu=="concept":pass
                                 (prompt, s, expectedAnswer) = random_split_color_generation(seeds[experiment], df)
                             expectedAnswer  = df.color[expectedAnswer]
-        
+
                         elif type_exp == "cardinal":
                             (prompt, expectedAnswer) = cardinalDataGen(seeds[experiment])
 
@@ -253,4 +253,20 @@ run_experiment(numTimesRepeatExperiment,models,["color"])
 
 
 
-            
+
+
+'''
+
+# For 2.3:
+cardinalSubspaceDataGen(
+    seed, angle=0, filename='', numTrainingPoints=20,
+    trainSubspace={}
+)
+
+# For 2.4:
+cardinalSubspaceDataGen(
+    seed, angle=0, filename='', numTrainingPoints=20,
+    trainSubspace={'north', 'south', 'east', 'west'}
+)
+
+'''

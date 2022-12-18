@@ -94,7 +94,7 @@ def generateUniqueCardinalWorldAndAnswer(f, angle, unseenConcept='', generateFor
 # Specifically, we show models examples of concepts in one sub-space of
 # the world (e.g., north, east, northeast) and then test them on concepts in a different
 # sub-space (e.g.,south, west, southwest).
-def cardinalSubspaceDataGen(seed, angle=0, filename='', numTrainingPoints=20):
+def cardinalSubspaceDataGen(seed, angle=0, filename='', numTrainingPoints=20, trainSubspace={}):
     random.seed(seed)
 
     f = StringFileInterface(filename)
@@ -104,11 +104,12 @@ def cardinalSubspaceDataGen(seed, angle=0, filename='', numTrainingPoints=20):
         'southeast', 'northeast', 'southwest', 'northwest'
     }
 
-    # Randomly choose a subspace to train
-    trainSubspace = {
-        random.choice(tuple(space))
-        for i in range(random.randint(0,6))
-    }
+    if len(trainSubspace) == 0:
+        # Randomly choose a subspace to train
+        trainSubspace = {
+            random.choice(tuple(space))
+            for i in range(random.randint(0,6))
+        }
 
     # The complementary would be the subspace to test
     testSubspace = space - trainSubspace
