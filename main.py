@@ -222,7 +222,7 @@ def run_experiment_B1(numTimesRepeatExperiment,models):
                     if  sp=="random":
                         if      rotation    ==  "None"  :
                             prompt,s,expectedAnswer = random_split_color_generation(experiment,df,rotation_by_90_degree=False, rotation_random=False)
-                            list_ans.append( [prompt,s,df.color[expectedAnswer]])
+                            list_ans.append([prompt,s,df.color[expectedAnswer]])
 
                         elif    rotation    ==  "90"    :
                             prompt,s,expectedAnswer  = random_split_color_generation(experiment,df,rotation_by_90_degree=True, rotation_random=False)
@@ -324,7 +324,7 @@ def run_experiment_B2(numTimesRepeatExperiment,models,type_expermients=["colour,
 
             for gtu in gen_to_unsee:
 
-                for rotation in rotation_list ::
+                for rotation in rotation_list :
 
                     for experiment in range(numTimesRepeatExperiment):
                         set_seed(experiment)
@@ -402,8 +402,7 @@ def run_experiment_B2(numTimesRepeatExperiment,models,type_expermients=["colour,
                                 # # For 2.4:
                                 # cardinalSubspaceDataGen(
                                 #     seed, angle=0, filename='', numTrainingPoints=20,
-                                #     trainSubspace={'north', 'south', 'east', 'west'}
-)                            
+                                #     trainSubspace={'north', 'south', 'east', 'west'}                     
                                     
 
 

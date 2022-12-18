@@ -71,16 +71,17 @@ def random_split_color_generation(seed, df,rotation_by_90_degree=False, rotation
                 # rotate random by a choosen random degree
                 rgb = rotate(df.RGB[value], random.randint(1, 360))
             samples.append("RGB: {} Answer: {}".format(rgb, df.color[value]))
-        else: 
-            key_of_the_last_value = value
-            samples.append("RGB:{} Answer: ".format(df.RGB[value]))
+    else: 
+        key_of_the_last_value = value
+        samples.append("RGB:{} Answer: ".format(df.RGB[value]))
 
     samples = primary_secondary_colors + samples
     
     gpt_prompt = " ".join(samples)
     gpt_prompt = gpt_prompt.strip()
     
-    #print( key_of_the_last_value)
+
+
     return gpt_prompt, samples[-1], key_of_the_last_value
 
 def check_euclidian_distance(color_1, color_2, df): 
@@ -135,6 +136,3 @@ def sub_space_color_generation(seed, df, rgb_random_color, rotation_by_90_degree
     gpt_prompt = gpt_prompt.strip()
 
     return gpt_prompt, "RGB: {} Answer: ".format(color_to_be_predict), df.index[df['RGB']==color_to_be_predict].tolist()[0]
-
-
-
