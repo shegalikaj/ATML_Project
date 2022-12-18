@@ -59,8 +59,8 @@ def random_split_color_generation(seed, df,rotation_by_90_degree=False, rotation
     samples = []
     color_keys = [i for i in range(len(df.color))]
     key_of_the_last_value = None
-    for key, value in enumerate(random.sample(color_keys, k=60)): 
-        if key < 64: 
+    for key, value in enumerate(random.sample(color_keys, k=40)): 
+        if key < 40: 
             if rotation_by_90_degree == False and rotation_random == False : 
                 # do the rotation by 90 degree
                 rgb = df.RGB[value]
@@ -71,9 +71,9 @@ def random_split_color_generation(seed, df,rotation_by_90_degree=False, rotation
                 # rotate random by a choosen random degree
                 rgb = rotate(df.RGB[value], random.randint(1, 360))
             samples.append("RGB: {} Answer: {}".format(rgb, df.color[value]))
-    else: 
-        key_of_the_last_value = value
-        samples.append("RGB:{} Answer: ".format(df.RGB[value]))
+        else: 
+            key_of_the_last_value = value
+            samples.append("RGB:{} Answer: ".format(df.RGB[value]))
 
     samples = primary_secondary_colors + samples
     
@@ -111,7 +111,7 @@ def sub_space_color_generation(seed, df, rgb_random_color, rotation_by_90_degree
 
 
 
-    filtered_color_population = list(filter(lambda x: check_euclidian_distance(x, rgb_random_color, df), df.RGB))[:57]
+    filtered_color_population = list(filter(lambda x: check_euclidian_distance(x, rgb_random_color, df), df.RGB))[:40]
     color_to_be_predict = random.sample(list(set(df.RGB)-set(filtered_color_population)), k=1)[0]
     
     samples = []
