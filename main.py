@@ -180,7 +180,7 @@ def run_experiment_B1(numTimesRepeatExperiment,models):
     print("Experiment for {numTimesRepeatExperiment} rounds")
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print(device)
-    
+
     tokenizer=None
     loaded_model=None
     statistics = np.zeros([len(models), numTimesRepeatExperiment])
@@ -197,8 +197,8 @@ def run_experiment_B1(numTimesRepeatExperiment,models):
 
         #print(model_to_eval)
         if model_to_eval[1]==0 : #GPT2 model
-            
-            
+
+
 
 
             model = GPT2LMHeadModel.from_pretrained(model_to_eval[0]).to(device)
@@ -285,7 +285,7 @@ def run_experiment_B1(numTimesRepeatExperiment,models):
                     #print(f"==========time{end - start}=====================")
                     row =["color",f"{sp} split",model_to_eval[0], rotation,top1_/len_ans,top3_/len_ans,end - start]
                     print(row)
-                    with open('/kaggle/working/color_experiment', 'a') as f:
+                    with open('/content/drive/MyDrive/ATMLData/color_experiment', 'a') as f:
                         # create the csv writer
                         writer = csv.writer(f)
                         # write a row to the csv file
@@ -333,22 +333,22 @@ def run_experiment_B1(numTimesRepeatExperiment,models):
 #                        if type_exp=="grid":
 #                             if gtu=="world":
 #                                 for pos in positions:#B2.1
-#                                     if      rotation    ==  "None"  :   
+#                                     if      rotation    ==  "None"  :
 #                                         (prompt, expectedAnswer) = spatialDataGen(experiment, angle=0, filename='', numTrainingPoints=20, unseenConcept='', answerValues=pos[0], direction=pos[1])
-#                                     elif    rotation    ==  "90"    :   
+#                                     elif    rotation    ==  "90"    :
 #                                         (prompt, expectedAnswer) = spatialDataGen(experiment, angle=90, filename='', numTrainingPoints=20, unseenConcept='', answerValues=pos[0], direction=pos[1])
-#                                     elif    rotation    ==  "Random":   
+#                                     elif    rotation    ==  "Random":
 #                                         (prompt, expectedAnswer) = spatialDataGen(experiment, angle=random.randint(1,360), filename='', numTrainingPoints=20, unseenConcept='', answerValues=pos[0], direction=pos[1])
-                                    
+
 #                                     list_ans.append( [prompt,expectedAnswer])
-                            
+
 #                             elif  gtu=="concept":#B2.1
 #                                 for pos in positions:#B2.1
-#                                     if      rotation    ==  "None"  :   
+#                                     if      rotation    ==  "None"  :
 #                                         (prompt, expectedAnswer) = spatialDataGen(experiment, angle=0, filename='', numTrainingPoints=20, unseenConcept='concept', answerValues=pos[0], direction=pos[1])
-#                                     elif    rotation    ==  "90"    :   
+#                                     elif    rotation    ==  "90"    :
 #                                         (prompt, expectedAnswer) = spatialDataGen(experiment, angle=90, filename='', numTrainingPoints=20, unseenConcept='concept', answerValues=pos[0], direction=pos[1])
-#                                     elif    rotation    ==  "Random":   
+#                                     elif    rotation    ==  "Random":
 #                                         (prompt, expectedAnswer) = spatialDataGen(experiment, angle=random.randint(1,360), filename='', numTrainingPoints=20, unseenConcept='concept', answerValues=pos[0], direction=pos[1])
 
 #                                     list_ans.append( [prompt,expectedAnswer])
@@ -357,13 +357,13 @@ def run_experiment_B1(numTimesRepeatExperiment,models):
 #                                 if      rotation    ==  "None"  :   (prompt, expectedAnswer) = spatialDataGen(experiment, angle=0, filename='', numTrainingPoints=20, unseenConcept='concept')
 #                                 elif    rotation    ==  "90"    :   (prompt, expectedAnswer) = spatialDataGen(experiment, angle=90, filename='', numTrainingPoints=20, unseenConcept='concept')
 #                                 elif    rotation    ==  "Random":   (prompt, expectedAnswer) = spatialDataGen(experiment, angle=random.randint(1,360), filename='', numTrainingPoints=20, unseenConcept='concept')
-                        
+
 #                         elif type_exp == "cardinal":
 #                             if gtu=="world":
 #                                 if      rotation    ==  "None"  :   (prompt, expectedAnswer) = cardinalDataGen(experiment, angle=0, filename='', numTrainingPoints=20, unseenConcept='')
 #                                 elif    rotation    ==  "90"    :   (prompt, expectedAnswer) = cardinalDataGen(experiment, angle=90, filename='', numTrainingPoints=20, unseenConcept='')
 #                                 elif    rotation    ==  "Random":   (prompt, expectedAnswer) = cardinalDataGen(experiment, angle=random.randint(1,360), filename='', numTrainingPoints=20, unseenConcept='')
-                            
+
 #                             elif  gtu=="concept":
 #                                 if      rotation    ==  "None"  :   (prompt, expectedAnswer) = cardinalDataGen(experiment, angle=0, filename='', numTrainingPoints=20, unseenConcept='concept')
 #                                 elif    rotation    ==  "90"    :   (prompt, expectedAnswer) = cardinalDataGen(experiment, angle=90, filename='', numTrainingPoints=20, unseenConcept='concept')
