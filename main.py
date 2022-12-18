@@ -302,7 +302,7 @@ def run_experiment_B2(numTimesRepeatExperiment,models,type_expermients=["grid","
     loaded_model=None
     statistics = np.zeros([len(models), numTimesRepeatExperiment])
     seeds=list(range(numTimesRepeatExperiment))
-    gen_to_unsee = ["world","concept"]
+    gen_to_unsee = ["world","concept","B2.3","B2.4"]
     rotation_list =["None","90","Random"]
     positions = [[('left', 'right'),'horizontal'],[('up', 'down'),'vertical'],[('top', 'bottom'),'vertical']]
     cardinal_space = ['north', 'east', 'west', 'south','southeast', 'northeast', 'southwest', 'northwest']
@@ -419,33 +419,38 @@ def run_experiment_B2(numTimesRepeatExperiment,models,type_expermients=["grid","
 
 
                     #print(list_ans)
-                    top1_=0
-                    top3_=0
-                    top1_corr=0
-                    top3_corr=0
-                    len_ans = len(list_ans)
-                    for ans in list_ans:
-                        # print("prompt")
-                        # print(ans[0])
-                        # print(f"{ans[2]}")
-                        # print("")
-                        top1_,top3_ = evaluateInModel(model_to_eval[1],model ,ans[0],ans[1],tokenizer)
-                        top1_corr   =  top1_corr    +   top1_
-                        top3_corr   =  top3_corr    +   top3_
-                        end = time.time()
-                    #index.append((name, instance.best_sol , opt2_ , s_  , q0_str  ))
-                    #print(f"Accuracy top1:{top1_/len_ans}, top2:{top3_/len_ans} time:{end - start}")
-                    #print(f"==========time{end - start}=====================")
-                    row =[type_exp,f"GTU {gtu}",model_to_eval[0], rotation,top1_/len_ans,top3_/len_ans,end - start]
-                    print(row)
-                    #with open('/content/drive/MyDrive/ATMLData/color_experiment', 'a') as f:#
-                    with open('./data/spa_car_exp.csv', 'a') as f:
-                        # create the csv writer
-                        writer = csv.writer(f)
-                        # write a row to the csv file
-                        writer.writerow(row)
-                        # close the file
-                        f.close()
+                    if (len(list_ans)!=0):
+
+
+                        top1_=0
+                        top3_=0
+                        top1_corr=0
+                        top3_corr=0
+                        len_ans = len(list_ans)
+                        for ans in list_ans:
+                            # print("prompt")
+                            # print(ans[0])
+                            # print(f"{ans[2]}")
+                            # print("")
+                            top1_,top3_ = evaluateInModel(model_to_eval[1],model ,ans[0],ans[1],tokenizer)
+                            top1_corr   =  top1_corr    +   top1_
+                            top3_corr   =  top3_corr    +   top3_
+                            end = time.time()
+                        #index.append((name, instance.best_sol , opt2_ , s_  , q0_str  ))
+                        #print(f"Accuracy top1:{top1_/len_ans}, top2:{top3_/len_ans} time:{end - start}")
+                        #print(f"==========time{end - start}=====================")
+                        row =[type_exp,f"GTU {gtu}",model_to_eval[0], rotation,top1_/len_ans,top3_/len_ans,end - start]
+                        print(row)
+                        #with open('/content/drive/MyDrive/ATMLData/color_experiment', 'a') as f:#
+                        with open('./data/spa_car_exp.csv', 'a') as f:
+                            # create the csv writer
+                            writer = csv.writer(f)
+                            # write a row to the csv file
+                            writer.writerow(row)
+                            # close the file
+                            f.close()
+                    else :
+                        print(f"No test tyep: {type_exp} , {gtu} ,model: {model_to_eval[0]},exp: {experiment}, rotation:{rotation}")
 
 
 #run_experiment(numTimesRepeatExperiment,models,["color"])
@@ -454,7 +459,7 @@ def run_experiment_B2(numTimesRepeatExperiment,models,type_expermients=["grid","
 models =  [("gpt2",0)]
 numTimesRepeatExperiment=1
 #spatialDataGen(2, angle=0, filename='', numTrainingPoints=5, unseenConcept='down', answerValues=('up','down'), direction='vertical')
-run_experiment_B2(numTimesRepeatExperiment,models,num_prompts=5)
+run_experiment_B2(numTimesRepeatExperiment,models,type_expermients=["grid","cardinal"],num_prompts=5)
 
 
 
