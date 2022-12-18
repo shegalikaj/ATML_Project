@@ -54,6 +54,7 @@ def generateUniqueSpatialWorldAndAnswer(f, angle, answerValues, unseenConcept=''
     # Rotate the matrix by the angle provided
     rotatedMat = rotate(mat, angle=angle, reshape=False) # TODO: Should it be true?
     rotatedMat = rotatedMat.round(2)
+    rotatedMat[rotatedMat == 0] = 0
 
     if xPos > m/2:
         answer = answerValues[1] # 'right'
@@ -72,3 +73,5 @@ def generateUniqueSpatialWorldAndAnswer(f, angle, answerValues, unseenConcept=''
     # Running it recursively until we find something that works for us is inefficient.
 
     return rotatedMat, answer
+
+spatialDataGen(100)
