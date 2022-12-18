@@ -116,14 +116,14 @@ def cardinalSubspaceDataGen(seed, angle=0, filename='', numTrainingPoints=20):
     # Sample 'numTrainingPoints' number of datapoints of type 'trainSubspace'
     for i in range(0, numTrainingPoints):
         answer = random.choice(tuple(trainSubspace))
-        mat = cardinalGenPointOfType(answer)
+        mat = cardinalGenPointOfType(answer, angle)
         f.write('\n\nWorld:\n')
         f.write(np.array2string(mat))
         f.write('\nAnswer:')
         f.write(answer)
 
     # Sample one point of type 'testSubspace'
-    answer = random.choice(tuple(testSubspace))
+    answer = random.choice(tuple(testSubspace), angle)
     mat = cardinalGenPointOfType(answer)
     f.write('\n\nWorld:\n')
     f.write(np.array2string(mat))
@@ -136,7 +136,7 @@ def cardinalSubspaceDataGen(seed, angle=0, filename='', numTrainingPoints=20):
 
     return mat, answer
 
-def cardinalGenPointOfType(type):
+def cardinalGenPointOfType(type, angle):
     # Size of the matrix
     # It has to be odd times odd matrix
     m = 2 * random.randint(1, 3) + 1
