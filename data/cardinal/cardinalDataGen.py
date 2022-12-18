@@ -119,18 +119,18 @@ def cardinalGenPointOfType(type, angle):
     if type == 'southeast':
         # xPos > m/2 - 0.5:
         # yPos > n/2 - 0.5:
-        xPos = random.randint(math.ceil(m/2), m)
-        yPos = random.randint(math.ceil(n/2), n)
+        xPos = random.randint(math.ceil(m/2), m - 1)
+        yPos = random.randint(math.ceil(n/2), n - 1)
     elif type == 'northeast':
         # xPos > m/2 - 0.5:
         # yPos < n/2 - 0.5:
-        xPos = random.randint(math.ceil(m/2), m)
+        xPos = random.randint(math.ceil(m/2), m - 1)
         yPos = random.randint(0, math.floor(n/2) - 1)
         print('x')
     elif type == 'east':
         # xPos > m/2 - 0.5:
         # yPos = n/2 - 0.5
-        xPos = random.randint(math.ceil(m/2), m)
+        xPos = random.randint(math.ceil(m/2), m - 1)
         # 'n' has to have an exact middle row
         if n % 2 == 0:
             n = n + 1
@@ -160,7 +160,7 @@ def cardinalGenPointOfType(type, angle):
         if m % 2 == 0:
             m = m + 1
         xPos = m/2 - 0.5
-        yPos = random.randint(math.ceil(n/2), n)
+        yPos = random.randint(math.ceil(n/2), n - 1)
 
     elif type == 'north':
         # xPos = m/2 - 0.5

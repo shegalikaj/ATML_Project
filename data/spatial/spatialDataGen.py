@@ -62,7 +62,7 @@ def generateUniqueSpatialWorldAndAnswer(f, angle, answerValues, unseenConcept=''
 
     answer = answerValues[answerIndex]
 
-    return answer, rotatedMat
+    return rotatedMat, answer
 
 def spatialGenPointOfType(type, angle):
     # Size of the matrix
@@ -70,12 +70,12 @@ def spatialGenPointOfType(type, angle):
     n = random.randint(1, 7)
 
     # Position of the true value
-    if type == 0:
+    if type == 1:
         # xPos < m/2 (left)
         xPos = random.randint(0, math.floor(m/2) - 1)
-    elif type == 1:
+    elif type == 0:
         # xPos > m/2 (right)
-        xPos = random.randint(math.ceil(m/2), m)
+        xPos = random.randint(math.ceil(m/2), m - 1)
     else:
         raise Exception('Unsupported direction')
     yPos = random.randint(0, n - 1)
@@ -90,5 +90,6 @@ def spatialGenPointOfType(type, angle):
 
     return rotatedMat
 
-spatialDataGen(2, angle=0, filename='', numTrainingPoints=5, unseenConcept='down', answerValues=('up','down'), direction='vertical')
-
+x, y = spatialDataGen(2, angle=0, filename='', numTrainingPoints=5, unseenConcept='down', answerValues=('up','down'), direction='vertical')
+print(x)
+print(y)
