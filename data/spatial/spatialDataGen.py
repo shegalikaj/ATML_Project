@@ -1,6 +1,7 @@
 import numpy as np
 from scipy.ndimage.interpolation import rotate
 import random
+import math
 
 class StringFileInterface:
     def __init__(self, filename=''):
@@ -47,15 +48,36 @@ def generateUniqueSpatialWorldAndAnswer(f, angle, answerValues, unseenConcept=''
     if unseenConcept == '':
         generateForUnseenConcept = False
 
+    if (generateForUnseenConcept):
+        answerIndex = answerValues.index(unseenConcept)
+    else:
+        space = {0, 1}
+        answerIndex = random.choice(tuple(space - {unseenConcept}))
+
+    rotatedMat = spatialGenPointOfType(answerIndex, angle)
+    # Recursively call and return function if:
+    # rotatedMat is already present in 'f.data'
+    if (np.array2string(rotatedMat) in f.data):
+        return generateUniqueSpatialWorldAndAnswer(f, angle, unseenConcept, generateForUnseenConcept)
+
+    answer = answerValues[answerIndex]
+
+    return answer, rotatedMat
+
+def spatialGenPointOfType(type, angle):
     # Size of the matrix
     m = random.randint(2, 7)
     n = random.randint(1, 7)
 
     # Position of the true value
-    do = True
-    while do: # Just to ensure that xPos is not at the middle
-        xPos = random.randint(0, m - 1)
-        do = (xPos == m/2 - 0.5)
+    if type == 0:
+        # xPos < m/2 (left)
+        xPos = random.randint(0, math.floor(m/2) - 1)
+    elif type == 1:
+        # xPos > m/2 (right)
+        xPos = random.randint(math.ceil(m/2), m)
+    else:
+        raise Exception('Unsupported direction')
     yPos = random.randint(0, n - 1)
 
     mat = np.zeros([n, m])
@@ -66,22 +88,5 @@ def generateUniqueSpatialWorldAndAnswer(f, angle, answerValues, unseenConcept=''
     rotatedMat = rotatedMat.round(2)
     rotatedMat[rotatedMat == 0] = 0
 
-    if xPos > m/2:
-        answer = answerValues[1] # 'right'
-    else:
-        answer = answerValues[0] # 'left'
+spatialDataGen(2, angle=0, filename='', numTrainingPoints=5, unseenConcept='down', answerValues=('up','down'), direction='vertical')
 
-    # Recursively call and return function if:
-    # 1. rotatedMat is already present in 'f.data'
-    # 2. answer is unseen concept and we are not generating for unseen concept
-    # 3. answer is not unseen concept and we are generating for unseen concept
-    if ((np.array2string(rotatedMat) in f.data)
-            or (answer == unseenConcept and ~generateForUnseenConcept)
-            or (answer != unseenConcept and generateForUnseenConcept)):
-        return generateUniqueSpatialWorldAndAnswer(f, angle, unseenConcept, generateForUnseenConcept)
-    # TODO: This can be done better.
-    # Running it recursively until we find something that works for us is inefficient.
-
-    return rotatedMat, answer
-
-spatialDataGen(100)

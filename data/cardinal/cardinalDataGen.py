@@ -44,62 +44,23 @@ def generateUniqueCardinalWorldAndAnswer(f, angle, unseenConcept='', generateFor
     if unseenConcept == '':
         generateForUnseenConcept = False
 
-    # Size of the matrix
-    # It has to be odd times odd matrix
-    m = 2 * random.randint(1, 3) + 1
-    n = 2 * random.randint(1, 3) + 1
-
-    # Position of the true value
-    do = True
-    while do: # Just to ensure that xPos, yPos is not at the middle
-        xPos = random.randint(0, m - 1)
-        yPos = random.randint(0, n - 1)
-        do = ((xPos == m/2 - 0.5) and (yPos == n/2 - 0.5))
-
-    mat = np.zeros([n, m])
-    mat[yPos, xPos] = 1
-
-    # Rotate the matrix by the angle provided
-    rotatedMat = rotate(mat, angle=angle, reshape=True)
-    rotatedMat = rotatedMat.round(2)
-    rotatedMat[rotatedMat == 0] = 0
-
-    if xPos > m/2 - 0.5:
-        if yPos > n/2 - 0.5:
-            answer = 'southeast'
-        elif yPos < n/2 - 0.5:
-            answer = 'northeast'
-        else:
-            answer = 'east'
-    elif xPos < m/2 - 0.5:
-        if yPos > n/2 - 0.5:
-            answer = 'southwest'
-        elif yPos < n/2 - 0.5:
-            answer = 'northwest'
-        else:
-            answer = 'west'
+    if (generateForUnseenConcept):
+        answer = unseenConcept
     else:
-        if yPos > n/2 - 0.5:
-            answer = 'south'
-        elif yPos < n/2 - 0.5:
-            answer = 'north'
-        else:
-            #answer = 'middle' # This shouldn't happen
-            raise Exception('Middle value provided')
+        space = {
+            'north', 'east', 'west', 'south',
+            'southeast', 'northeast', 'southwest', 'northwest'
+        }
+        answer = random.choice(tuple(space - {unseenConcept}))
 
+    rotatedMat = cardinalGenPointOfType(answer, angle)
 
     # Recursively call and return function if:
-    # 1. rotatedMat is already present in 'f.data'
-    # 2. answer is unseen concept and we are not generating for unseen concept
-    # 3. answer is not unseen concept and we are generating for unseen concept
-    if ((np.array2string(rotatedMat) in f.data)
-            or (answer == unseenConcept and ~generateForUnseenConcept)
-            or (answer != unseenConcept and generateForUnseenConcept)):
+    # rotatedMat is already present in 'f.data'
+    if (np.array2string(rotatedMat) in f.data):
         return generateUniqueCardinalWorldAndAnswer(f, angle, unseenConcept, generateForUnseenConcept)
-    # TODO: This can be done better.
-    # Running it recursively until we find something that works for us is inefficient.
 
-    return rotatedMat, answer
+    return answer, rotatedMat
 
 
 # Specifically, we show models examples of concepts in one sub-space of
