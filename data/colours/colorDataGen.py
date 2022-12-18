@@ -80,7 +80,7 @@ def random_split_color_generation(seed, df,rotation_by_90_degree=False, rotation
     gpt_prompt = " ".join(samples)
     gpt_prompt = gpt_prompt.strip()
     
-    print( key_of_the_last_value)
+    #print( key_of_the_last_value)
     return gpt_prompt, samples[-1], key_of_the_last_value
 
 def check_euclidian_distance(color_1, color_2, df): 
