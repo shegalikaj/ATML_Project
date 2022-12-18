@@ -257,6 +257,14 @@ run_experiment(numTimesRepeatExperiment,models,["color"])
 
 '''
 
+# Incorporating the ability to have up/down, above/below to spatialDataGen
+spatialDataGen(
+    seed, angle=0, filename='', numTrainingPoints=20,
+    unseenConcept='',
+    answerValues=('up', 'down'), direction='vertical'
+)
+
+
 # For 2.3:
 cardinalSubspaceDataGen(
     seed, angle=0, filename='', numTrainingPoints=20,

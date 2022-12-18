@@ -7,18 +7,23 @@ sys.path.append('../')
 
 from utils import *
 
-def spatialDataGen(seed, angle=0, filename='', numTrainingPoints=20, unseenConcept=''):
+def spatialDataGen(seed, angle=0, filename='', numTrainingPoints=20, unseenConcept='', answerValues=('left', 'right'), direction='horizontal'):
     random.seed(seed)
 
     f = StringFileInterface(filename)
 
+    # It is easier to incorporate the direction aspect here rather than
+    # changing the entire function with conditional statements
+    if direction == 'vertical':
+        angle += 90
+
     for i in range(0, numTrainingPoints):
-        mat, answer = generateUniqueSpatialWorldAndAnswer(f, angle, unseenConcept, False)
+        mat, answer = generateUniqueSpatialWorldAndAnswer(f, angle, answerValues, unseenConcept, False)
         f.write('\n\nWorld:\n')
         f.write(np.array2string(mat))
         f.write('\nAnswer:'+answer)
 
-    mat, answer = generateUniqueSpatialWorldAndAnswer(f, angle, unseenConcept, True)
+    mat, answer = generateUniqueSpatialWorldAndAnswer(f, angle, answerValues, unseenConcept, True)
     f.write('\n\nWorld:\n')
     f.write(np.array2string(mat))
     f.write('\nAnswer:')
@@ -28,7 +33,7 @@ def spatialDataGen(seed, angle=0, filename='', numTrainingPoints=20, unseenConce
     if not(filename):
         return (f.data, answer)
 
-def generateUniqueSpatialWorldAndAnswer(f, angle, unseenConcept='', generateForUnseenConcept=True):
+def generateUniqueSpatialWorldAndAnswer(f, angle, answerValues, unseenConcept='', generateForUnseenConcept=True):
     if unseenConcept == '':
         generateForUnseenConcept = False
 
@@ -51,9 +56,9 @@ def generateUniqueSpatialWorldAndAnswer(f, angle, unseenConcept='', generateForU
     rotatedMat = rotatedMat.round(2)
 
     if xPos > m/2:
-        answer = 'right'
+        answer = answerValues[1] # 'right'
     else:
-        answer = 'left'
+        answer = answerValues[0] # 'left'
 
     # Recursively call and return function if:
     # 1. rotatedMat is already present in 'f.data'
