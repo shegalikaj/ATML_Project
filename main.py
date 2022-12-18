@@ -260,7 +260,7 @@ def run_experiment_B1(numTimesRepeatExperiment,models):
                                 prompt,s,expectedAnswer  =   sub_space_color_generation(experiment,df,rgb_color_sub,rotation_by_90_degree=False,rotation_random=True)
                                 list_ans.append( [prompt,s,df.color[expectedAnswer]])
 
-                    experiment
+                    #experiment
                     #print("+++++++++START++++++++++++++++++++++++")
                     start = time.time()
                     #print(f"Color GTUC, {sp} split ,model: {model_to_eval[0]},exp: {experiment}, rotation:{rotation} ")
@@ -296,13 +296,13 @@ def run_experiment_B1(numTimesRepeatExperiment,models):
 
 
 
-def run_experiment_B2(numTimesRepeatExperiment,models,type_expermients=["colour,B2"]):
+def run_experiment_B2(numTimesRepeatExperiment,models,type_expermients=["grid","cardinal"],num_prompts=20):
 
     tokenizer=None
     loaded_model=None
     statistics = np.zeros([len(models), numTimesRepeatExperiment])
     seeds=list(range(numTimesRepeatExperiment))
-    gen_to_unsee = ["world","concept"]
+    gen_to_unsee = ["world"]#,"concept"]
     rotation_list =["None","90","Random"]
     positions = [[('left', 'right'),'horizontal'],[('up', 'down'),'vertical'],[('top', 'bottom'),'vertical']]
 
@@ -333,123 +333,113 @@ def run_experiment_B2(numTimesRepeatExperiment,models,type_expermients=["colour,
 
                         if type_exp=="grid":
                             if gtu=="world":
+                                print(f"tyep: {type_exp} , {gtu} ,model: {model_to_eval[0]},exp: {experiment}, rotation:{rotation}")
                                 for pos in positions:#B2.1
                                     if      rotation    ==  "None"  :
-                                        (prompt, expectedAnswer) = spatialDataGen(experiment, angle=0, filename='', numTrainingPoints=20, unseenConcept='', answerValues=pos[0], direction=pos[1])
+                                        #def spatialDataGen(seed, angle=0, filename='', numTrainingPoints=20, unseenConcept='', answerValues=('left', 'right'), direction='horizontal'):
+
+                                        (prompt, expectedAnswer) = spatialDataGen(experiment, angle=0, filename='', numTrainingPoints=num_prompts, unseenConcept='', answerValues=pos[0], direction=pos[1])
+                                        # print(len(prompt))
+                                        # print(prompt)
+                                        # print(expectedAnswer)
                                     elif    rotation    ==  "90"    :
-                                        (prompt, expectedAnswer) = spatialDataGen(experiment, angle=90, filename='', numTrainingPoints=20, unseenConcept='', answerValues=pos[0], direction=pos[1])
+                                        (prompt, expectedAnswer) = spatialDataGen(experiment, angle=90, filename='', numTrainingPoints=num_prompts, unseenConcept='', answerValues=pos[0], direction=pos[1])
                                     elif    rotation    ==  "Random":
-                                        (prompt, expectedAnswer) = spatialDataGen(experiment, angle=random.randint(1,360), filename='', numTrainingPoints=20, unseenConcept='', answerValues=pos[0], direction=pos[1])
+                                        (prompt, expectedAnswer) = spatialDataGen(experiment, angle=random.randint(1,360), filename='', numTrainingPoints=num_prompts, unseenConcept='', answerValues=pos[0], direction=pos[1])
+                                        # print(len(prompt))
+                                        # print(prompt)
+                                        # print(expectedAnswer)
 
                                     list_ans.append( [prompt,expectedAnswer])
 
                             elif  gtu=="concept":#B2.1
+                                print(f"tyep: {type_exp} , {gtu} ,model: {model_to_eval[0]},exp: {experiment}, rotation:{rotation}")
                                 for pos in positions:#B2.1
                                     if      rotation    ==  "None"  :
-                                        (prompt, expectedAnswer) = spatialDataGen(experiment, angle=0, filename='', numTrainingPoints=20, unseenConcept='concept', answerValues=pos[0], direction=pos[1])
+                                        (prompt, expectedAnswer) = spatialDataGen(experiment, angle=0, filename='', numTrainingPoints=num_prompts, unseenConcept=pos[0], answerValues=pos[0], direction=pos[1])
                                     elif    rotation    ==  "90"    :
-                                        (prompt, expectedAnswer) = spatialDataGen(experiment, angle=90, filename='', numTrainingPoints=20, unseenConcept='concept', answerValues=pos[0], direction=pos[1])
+                                        (prompt, expectedAnswer) = spatialDataGen(experiment, angle=90, filename='', numTrainingPoints=num_prompts, unseenConcept=pos[0], answerValues=pos[0], direction=pos[1])
                                     elif    rotation    ==  "Random":
-                                        (prompt, expectedAnswer) = spatialDataGen(experiment, angle=random.randint(1,360), filename='', numTrainingPoints=20, unseenConcept='concept', answerValues=pos[0], direction=pos[1])
+                                        (prompt, expectedAnswer) = spatialDataGen(experiment, angle=random.randint(1,360), filename='', numTrainingPoints=num_prompts, unseenConcept=pos[0], answerValues=pos[0], direction=pos[1])
 
                                     list_ans.append( [prompt,expectedAnswer])
                             
                         if  type_exp ==  "cardinal":
+                            print(f"tyep: {type_exp} , {gtu} ,model: {model_to_eval[0]},exp: {experiment}, rotation:{rotation}")
                             if gtu=="world":
                                 if rotation ==  "None":
-                                    prompt, expectedAnswer = cardinalDataGen(experiment, angle=0, filename='', numTrainingPoints=20, unseenConcept='')
+                                    prompt, expectedAnswer = cardinalDataGen(experiment, angle=0, filename='', numTrainingPoints=num_prompts, unseenConcept='')
                                 elif rotation == "90":
-                                    prompt, expectedAnswer = cardinalDataGen(experiment, angle=90, filename='', numTrainingPoints=20, unseenConcept='') 
+                                    prompt, expectedAnswer = cardinalDataGen(experiment, angle=90, filename='', numTrainingPoints=num_prompts, unseenConcept='') 
                                 elif rotation =="Random": 
-                                    prompt, expectedAnswer = cardinalDataGen(experiment, angle=random.randint(1,360), filename='', numTrainingPoints=20, unseenConcept='')
+                                    prompt, expectedAnswer = cardinalDataGen(experiment, angle=random.randint(1,360), filename='', numTrainingPoints=num_prompts, unseenConcept='')
                             
                             if gtu=="concept":
                                 if rotation ==  "None":
-                                    prompt, expectedAnswer = cardinalDataGen(experiment, angle=0, filename='', numTrainingPoints=20, unseenConcept='concept')
+                                    prompt, expectedAnswer = cardinalDataGen(experiment, angle=0, filename='', numTrainingPoints=num_prompts, unseenConcept='concept')
                                 elif rotation == "90":
-                                    prompt, expectedAnswer = cardinalDataGen(experiment, angle=90, filename='', numTrainingPoints=20, unseenConcept='concept') 
+                                    prompt, expectedAnswer = cardinalDataGen(experiment, angle=90, filename='', numTrainingPoints=num_prompts, unseenConcept='concept') 
                                 elif rotation =="Random": 
-                                    prompt, expectedAnswer = cardinalDataGen(experiment, angle=random.randint(1,360), filename='', numTrainingPoints=20, unseenConcept='')
+                                    prompt, expectedAnswer = cardinalDataGen(experiment, angle=random.randint(1,360), filename='', numTrainingPoints=num_prompts, unseenConcept='concept')
 
                             if gtu=="B2.3":
                                 if rotation == "None": 
-                                    prompt, expectedAnswer = cardinalSubspaceDataGen(experiment, angle=0, filename='', numTrainingPoints=20,trainSubspace={})
+                                    prompt, expectedAnswer = cardinalSubspaceDataGen(experiment, angle=0, filename='', numTrainingPoints=num_prompts,trainSubspace={})
                                 elif rotation == "90": 
-                                    prompt, expectedAnswer = cardinalSubspaceDataGen(experiment, angle=90, filename='', numTrainingPoints=20,trainSubspace={})
+                                    prompt, expectedAnswer = cardinalSubspaceDataGen(experiment, angle=90, filename='', numTrainingPoints=num_prompts,trainSubspace={})
                                 elif rotation == "Random":
-                                    prompt, expectedAnswer = cardinalSubspaceDataGen(experiment, angle=random.randint(1,360), filename='', numTrainingPoints=20,trainSubspace={}) 
+                                    prompt, expectedAnswer = cardinalSubspaceDataGen(experiment, angle=random.randint(1,360), filename='', numTrainingPoints=num_prompts,trainSubspace={}) 
                             
-
-                            if gtu=="B2.3":
-                                if rotation == "None": 
-                                    prompt, expectedAnswer = cardinalSubspaceDataGen(experiment, angle=0, filename='', numTrainingPoints=20,trainSubspace={})
-                                elif rotation == "90": 
-                                    prompt, expectedAnswer = cardinalSubspaceDataGen(experiment, angle=90, filename='', numTrainingPoints=20,trainSubspace={})
-                                elif rotation == "Random": 
-                                    prompt, expectedAnswer = cardinalSubspaceDataGen(experiment, angle=random.randint(1,360), filename='', numTrainingPoints=20,trainSubspace={})
-
                             if gtu=="B2.4":
                                 if rotation == "None": 
-                                    prompt, expectedAnswer = cardinalSubspaceDataGen(experiment, angle=0, filename='', numTrainingPoints=20,trainSubspace={})
+                                    prompt, expectedAnswer = cardinalSubspaceDataGen(experiment, angle=0, filename='', numTrainingPoints=num_prompts,trainSubspace={'north', 'south', 'east', 'west'})
                                 elif rotation == "90": 
-                                    prompt, expectedAnswer = cardinalSubspaceDataGen(experiment, angle=90, filename='', numTrainingPoints=20,trainSubspace={})
+                                    prompt, expectedAnswer = cardinalSubspaceDataGen(experiment, angle=90, filename='', numTrainingPoints=num_prompts,trainSubspace={'north', 'south', 'east', 'west'})
                                 elif rotation == "Random": 
-                                    prompt, expectedAnswer = cardinalSubspaceDataGen(experiment, angle=random.randint(1,360), filename='', numTrainingPoints=20,trainSubspace={})
+                                    prompt, expectedAnswer = cardinalSubspaceDataGen(experiment, angle=random.randint(1,360), filename='', numTrainingPoints=num_prompts,trainSubspace={'north', 'south', 'east', 'west'})
 
+                    #experiment
+                    #print("+++++++++START++++++++++++++++++++++++")
+                    start = time.time()
+                    #print(f"tyep: {type_exp} , {gtu} ,model: {model_to_eval[0]},exp: {experiment}, rotation:{rotation}len:{len(prompt)} ")
 
-                                
-
-                                # # For 2.4:
-                                # cardinalSubspaceDataGen(
-                                #     seed, angle=0, filename='', numTrainingPoints=20,
-                                #     trainSubspace={'north', 'south', 'east', 'west'}                     
-                                    
-
-
-                        #         cardinalDataGen(seed, angle=0, filename='', numTrainingPoints=20, unseenConcept=''):
-
-                        #         rotation    ==  "None"  :   
-                        #             cardinalDataGen(experiment, angle=0, filename='', numTrainingPoints=20, unseenConcept='')
-                        #             (prompt, expectedAnswer) = spatialDataGen(experiment, angle=0, filename='', numTrainingPoints=20, unseenConcept='concept')
-                        #         rotation    ==  "90"    :   (prompt, expectedAnswer) = spatialDataGen(experiment, angle=90, filename='', numTrainingPoints=20, unseenConcept='concept')
-                        #         rotation    ==  "Random":   (prompt, expectedAnswer) = spatialDataGen(experiment, angle=random.randint(1,360), filename='', numTrainingPoints=20, unseenConcept='concept')
-
-                        # elif type_exp == "cardinal":
-                        #     if gtu=="world":
-                        #         if      rotation    ==  "None"  :   (prompt, expectedAnswer) = cardinalDataGen(experiment, angle=0, filename='', numTrainingPoints=20, unseenConcept='')
-                        #         elif    rotation    ==  "90"    :   (prompt, expectedAnswer) = cardinalDataGen(experiment, angle=90, filename='', numTrainingPoints=20, unseenConcept='')
-                        #         elif    rotation    ==  "Random":   (prompt, expectedAnswer) = cardinalDataGen(experiment, angle=random.randint(1,360), filename='', numTrainingPoints=20, unseenConcept='')
-
-                        #     elif  gtu=="concept":
-                        #         if      rotation    ==  "None"  :   (prompt, expectedAnswer) = cardinalDataGen(experiment, angle=0, filename='', numTrainingPoints=20, unseenConcept='concept')
-                        #         elif    rotation    ==  "90"    :   (prompt, expectedAnswer) = cardinalDataGen(experiment, angle=90, filename='', numTrainingPoints=20, unseenConcept='concept')
-                        #         elif    rotation    ==  "Random":   (prompt, expectedAnswer) = cardinalDataGen(experiment, angle=random.randint(1,360), filename='', numTrainingPoints=20, unseenConcept='concept')
-
-
-                        # elif type_exp=="color":
-                        #     if      gtu=="world":pass
-                        #     elif    gtu=="concept":pass
-                        #     (prompt, s, expectedAnswer) = random_split_color_generation(seeds[experiment], df)
-                        #     expectedAnswer  = df.color[expectedAnswer]
-
-                        # elif type_exp == "cardinal":
-                        #     (prompt, expectedAnswer) = cardinalDataGen(seeds[experiment])
-
-                        # #experiment
-
-                        # start = time.time()
-                        # print(f"model: {model_to_eval[0]},exp: {k}, type: {type_exp}  ")
-                        # #print(f"prompt: {prompt}")
-
-                        # answer = evaluateInModel(model_to_eval[1],model ,prompt,expectedAnswer,tokenizer)
-                        # end = time.time()
-
-                        # print(f"{model_to_eval[0]} ans: {answer}, real ans:{expectedAnswer}, time:{end - start}")
+                    #print(list_ans)
+                    top1_=0
+                    top3_=0
+                    top1_corr=0
+                    top3_corr=0
+                    len_ans = len(list_ans)
+                    for ans in list_ans:
+                        # print("prompt")
+                        # print(ans[0])
+                        # print(f"{ans[2]}")
+                        # print("")
+                        top1_,top3_ = evaluateInModel(model_to_eval[1],model ,ans[0],ans[1],tokenizer)
+                        top1_corr   =  top1_corr    +   top1_
+                        top3_corr   =  top3_corr    +   top3_
+                        end = time.time()
+                    #index.append((name, instance.best_sol , opt2_ , s_  , q0_str  ))
+                    #print(f"Accuracy top1:{top1_/len_ans}, top2:{top3_/len_ans} time:{end - start}")
+                    #print(f"==========time{end - start}=====================")
+                    row =[type_exp,f"GTU {gtu}",model_to_eval[0], rotation,top1_/len_ans,top3_/len_ans,end - start]
+                    print(row)
+                    #with open('/content/drive/MyDrive/ATMLData/color_experiment', 'a') as f:#
+                    with open('./data/spa_car_exp.csv', 'a') as f:
+                        # create the csv writer
+                        writer = csv.writer(f)
+                        # write a row to the csv file
+                        writer.writerow(row)
+                        # close the file
+                        f.close()
 
 
 #run_experiment(numTimesRepeatExperiment,models,["color"])
-run_experiment_B1(numTimesRepeatExperiment,models)
-
+#run_experiment_B1(numTimesRepeatExperiment,models)
+#models =  [("gpt2",0),("gpt2-medium",0),("gpt2-large",0),("gpt2-xl",0),("gpt3",1)]
+models =  [("gpt2",0)]
+numTimesRepeatExperiment=1
+#spatialDataGen(2, angle=0, filename='', numTrainingPoints=5, unseenConcept='down', answerValues=('up','down'), direction='vertical')
+run_experiment_B2(numTimesRepeatExperiment,models,num_prompts=5)
 
 
 
