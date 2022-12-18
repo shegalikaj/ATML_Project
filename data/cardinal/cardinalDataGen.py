@@ -3,10 +3,20 @@ from scipy.ndimage.interpolation import rotate
 import random
 import math
 
-import sys
-sys.path.append('../')
+class StringFileInterface:
+    def __init__(self, filename=''):
+        self.toFile = bool(filename)
+        if self.toFile:
+            self.f = open(filename, "w")
+        self.data = ''
+    def write(self, str):
+        if self.toFile:
+            self.f.write(str)
+        self.data += str
 
-from utils import *
+    def close(self):
+        if self.toFile:
+            self.f.close()
 
 def cardinalDataGen(seed, angle=0, filename='', numTrainingPoints=20, unseenConcept=''):
     random.seed(seed)
