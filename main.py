@@ -11,7 +11,7 @@ from transformers import (
     GPT2LMHeadModel,
     GPT2Tokenizer,
     set_seed
-) 
+)
 import sys
 openai.api_key = ""
 
@@ -63,7 +63,7 @@ def evaluateInModel(modelNumber,model ,prompt,real_ans,tokenizer=None,):
         time.sleep(2)
 
         top1,top3= check_outputs(response,prompt,real_ans,modelNumber)
-        
+
         #return response['choices'][0]['text']
         return top1,top3
 
@@ -89,8 +89,8 @@ def evaluateInModel(modelNumber,model ,prompt,real_ans,tokenizer=None,):
         ).to(device)
         # print(f"len_promt{len(prompt)}")
         # print("input_IDS")
-        
-        # Check the documentation of function generate for any change in attributes. 
+
+        # Check the documentation of function generate for any change in attributes.
         # https://huggingface.co/docs/transformers/main_classes/text_generation
         output_ids = model.generate(
             input_ids=input_ids,
@@ -109,7 +109,7 @@ def evaluateInModel(modelNumber,model ,prompt,real_ans,tokenizer=None,):
         #     output_ids,
         #     clean_up_tokenization_spaces=True)
 
-        
+
         #print("_____top3____")
         generated_sequences = [tokenizer.decode(s.tolist(), skip_special_tokens=True) for s in output_ids] #clean_up_tokenization_spaces=True)
         top1,top3= check_outputs(generated_sequences,prompt,real_ans,modelNumber)
@@ -119,7 +119,7 @@ def evaluateInModel(modelNumber,model ,prompt,real_ans,tokenizer=None,):
         # Run it on GPT-2, models with different sizes
        # generated_text=generated_text.replace(prompt, '')
         return top1,top3
-    
+
     return "Error"
 
 def check_outputs(response,prompt,exp_ans,mod_num):
@@ -141,8 +141,8 @@ def check_outputs(response,prompt,exp_ans,mod_num):
 
         res = [''.join(filtered_words[i: j]) for i in range(len(filtered_words))
                 for j in range(i + 1, len(filtered_words) + 1)]
-    
-    
+
+
     # index = string.find(substring)
     # if index != -1:
     # print("Substring found at index", index)
@@ -164,7 +164,7 @@ def check_outputs(response,prompt,exp_ans,mod_num):
                 #print(f"FOund on others f: {f}")
                 top3=1
                 return top1,top3
-    
+
     return top1,top3
 
 
@@ -194,7 +194,7 @@ def run_experiment_B1(numTimesRepeatExperiment,models):
 
 
     for k,model_to_eval in enumerate(models):
-        
+
         #print(model_to_eval)
         if model_to_eval[1]==0 : #GPT2 model
             
@@ -204,36 +204,36 @@ def run_experiment_B1(numTimesRepeatExperiment,models):
             model = GPT2LMHeadModel.from_pretrained(model_to_eval[0]).to(device)
             tokenizer = GPT2Tokenizer.from_pretrained(model_to_eval[0])
 
-            
+
         else: #model[1]==1 #GPT3 model
             model = openai.Completion
-            
+
 
         for sp in split:
 
             for rotation in rotation_list :
-            
+
                 for experiment in range(numTimesRepeatExperiment):
                     set_seed(experiment)
 
                     list_ans = []
                     # print("------------------------------------")
                     # print(f"Color GTUC, {sp} split ,model: {model_to_eval[0]},exp: {k}, rotation:{rotation} ")
-                    if  sp=="random": 
-                        if      rotation    ==  "None"  : 
+                    if  sp=="random":
+                        if      rotation    ==  "None"  :
                             prompt,s,expectedAnswer = random_split_color_generation(experiment,df,rotation_by_90_degree=False, rotation_random=False)
                             list_ans.append( [prompt,s,df.color[expectedAnswer]])
 
-                        elif    rotation    ==  "90"    :  
+                        elif    rotation    ==  "90"    :
                             prompt,s,expectedAnswer  = random_split_color_generation(experiment,df,rotation_by_90_degree=True, rotation_random=False)
                             list_ans.append( [prompt,s,df.color[expectedAnswer]])
 
-                        elif    rotation    ==  "Random":   
+                        elif    rotation    ==  "Random":
                             prompt,s,expectedAnswer  =  random_split_color_generation(experiment,df,rotation_by_90_degree=False, rotation_random=True)
                             list_ans.append( [prompt,s,df.color[expectedAnswer]])
 
                     if sp == "subspace":
-                        if      rotation    ==  "None"  : 
+                        if      rotation    ==  "None"  :
                             for color_sub in colors_prim_sec :
                                 match = re.search(r"\((\d+,\s*\d+,\s*\d+)\)", color_sub)
                                 value = match.group(1)
@@ -242,7 +242,7 @@ def run_experiment_B1(numTimesRepeatExperiment,models):
                                 prompt,s,expectedAnswer  =   sub_space_color_generation(experiment,df,rgb_color_sub,rotation_by_90_degree=False,rotation_random=False)
                                 list_ans.append( [prompt,s,df.color[expectedAnswer]])
 
-                        elif      rotation    ==  "90"  : 
+                        elif      rotation    ==  "90"  :
                             for color_sub in colors_prim_sec:
                                 match = re.search(r"\((\d+,\s*\d+,\s*\d+)\)", color_sub)
                                 value = match.group(1)
@@ -251,7 +251,7 @@ def run_experiment_B1(numTimesRepeatExperiment,models):
                                 prompt,s,expectedAnswer  =   sub_space_color_generation(experiment,df,rgb_color_sub,rotation_by_90_degree=True,rotation_random=False)
                                 list_ans.append( [prompt,s,df.color[expectedAnswer]])
 
-                        elif      rotation    ==  "Random"  : 
+                        elif      rotation    ==  "Random"  :
                             for color_sub in colors_prim_sec :
                                 match = re.search(r"\((\d+,\s*\d+,\s*\d+)\)", color_sub)
                                 value = match.group(1)
@@ -259,7 +259,7 @@ def run_experiment_B1(numTimesRepeatExperiment,models):
                                 rgb_color_sub= tuple(int(x.strip()) for x in parts)
                                 prompt,s,expectedAnswer  =   sub_space_color_generation(experiment,df,rgb_color_sub,rotation_by_90_degree=False,rotation_random=True)
                                 list_ans.append( [prompt,s,df.color[expectedAnswer]])
-                    
+
                     experiment
                     #print("+++++++++START++++++++++++++++++++++++")
                     start = time.time()
@@ -285,7 +285,7 @@ def run_experiment_B1(numTimesRepeatExperiment,models):
                     #print(f"==========time{end - start}=====================")
                     row =["color",f"{sp} split",model_to_eval[0], rotation,top1_/len_ans,top3_/len_ans,end - start]
                     print(row)
-                    with open('./data/color_experiment', 'a') as f:
+                    with open('/kaggle/working/color_experiment', 'a') as f:
                         # create the csv writer
                         writer = csv.writer(f)
                         # write a row to the csv file
@@ -297,7 +297,7 @@ def run_experiment_B1(numTimesRepeatExperiment,models):
 
 
 def run_experiment_B2(numTimesRepeatExperiment,models,type_expermients=["colour,B2"]):
-    
+
     tokenizer=None
     loaded_model=None
     statistics = np.zeros([len(models), numTimesRepeatExperiment])
@@ -308,13 +308,13 @@ def run_experiment_B2(numTimesRepeatExperiment,models,type_expermients=["colour,
     result_collector = []
 
     for k,model_to_eval in enumerate(models):
-        
+
         print(model_to_eval)
         if model_to_eval[1]==0 : #GPT2 model
             tokenizer = GPT2Tokenizer.from_pretrained(model_to_eval[0])
             model = GPT2LMHeadModel.from_pretrained(model_to_eval[0])
 
-            
+
         else: #model[1]==1 #GPT3 model
             model = openai.Completion
             pass
@@ -324,7 +324,7 @@ def run_experiment_B2(numTimesRepeatExperiment,models,type_expermients=["colour,
             for gtu in gen_to_unsee:
 
                 for rot in rotation :
-                
+
                     for experiment in range(numTimesRepeatExperiment):
                         set_seed(experiment)
 
@@ -335,18 +335,18 @@ def run_experiment_B2(numTimesRepeatExperiment,models,type_expermients=["colour,
                                 if      rotation    ==  "None"  :   (prompt, expectedAnswer) = spatialDataGen(experiment, angle=0, filename='', numTrainingPoints=20, unseenConcept='')
                                 elif    rotation    ==  "90"    :   (prompt, expectedAnswer) = spatialDataGen(experiment, angle=90, filename='', numTrainingPoints=20, unseenConcept='')
                                 elif    rotation    ==  "Random":   (prompt, expectedAnswer) = spatialDataGen(experiment, angle=random.randint(0,360), filename='', numTrainingPoints=20, unseenConcept='')
-                            
+
                             elif  gtu=="concept":
                                 if      rotation    ==  "None"  :   (prompt, expectedAnswer) = spatialDataGen(experiment, angle=0, filename='', numTrainingPoints=20, unseenConcept='concept')
                                 elif    rotation    ==  "90"    :   (prompt, expectedAnswer) = spatialDataGen(experiment, angle=90, filename='', numTrainingPoints=20, unseenConcept='concept')
                                 elif    rotation    ==  "Random":   (prompt, expectedAnswer) = spatialDataGen(experiment, angle=random.randint(1,360), filename='', numTrainingPoints=20, unseenConcept='concept')
-                        
+
                         elif type_exp == "cardinal":
                             if gtu=="world":
                                 if      rotation    ==  "None"  :   (prompt, expectedAnswer) = cardinalDataGen(experiment, angle=0, filename='', numTrainingPoints=20, unseenConcept='')
                                 elif    rotation    ==  "90"    :   (prompt, expectedAnswer) = cardinalDataGen(experiment, angle=90, filename='', numTrainingPoints=20, unseenConcept='')
                                 elif    rotation    ==  "Random":   (prompt, expectedAnswer) = cardinalDataGen(experiment, angle=random.randint(1,360), filename='', numTrainingPoints=20, unseenConcept='')
-                            
+
                             elif  gtu=="concept":
                                 if      rotation    ==  "None"  :   (prompt, expectedAnswer) = cardinalDataGen(experiment, angle=0, filename='', numTrainingPoints=20, unseenConcept='concept')
                                 elif    rotation    ==  "90"    :   (prompt, expectedAnswer) = cardinalDataGen(experiment, angle=90, filename='', numTrainingPoints=20, unseenConcept='concept')
@@ -357,7 +357,7 @@ def run_experiment_B2(numTimesRepeatExperiment,models,type_expermients=["colour,
                             elif    gtu=="concept":pass
                             (prompt, s, expectedAnswer) = random_split_color_generation(seeds[experiment], df)
                             expectedAnswer  = df.color[expectedAnswer]
-        
+
                         elif type_exp == "cardinal":
                             (prompt, expectedAnswer) = cardinalDataGen(seeds[experiment])
 
@@ -378,7 +378,7 @@ run_experiment_B1(numTimesRepeatExperiment,models)
 
 
 
-            
+
 
 
 
