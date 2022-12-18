@@ -263,6 +263,11 @@ spatialDataGen(
     unseenConcept='',
     answerValues=('up', 'down'), direction='vertical'
 )
+spatialDataGen(
+    seed, angle=0, filename='', numTrainingPoints=20,
+    unseenConcept='',
+    answerValues=('top', 'bottom'), direction='vertical'
+)
 
 
 # For 2.3:
