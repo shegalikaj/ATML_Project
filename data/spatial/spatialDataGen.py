@@ -84,12 +84,13 @@ def spatialGenPointOfType(type, angle):
     mat[yPos, xPos] = 1
 
     # Rotate the matrix by the angle provided
-    rotatedMat = rotate(mat, angle=angle, reshape=False) # TODO: Should it be true?
+    rotatedMat = rotate(mat, angle=angle, reshape=True)
     rotatedMat = rotatedMat.round(2)
     rotatedMat[rotatedMat == 0] = 0
 
     return rotatedMat
 
-x, y = spatialDataGen(2, angle=0, filename='', numTrainingPoints=5, unseenConcept='down', answerValues=('up','down'), direction='vertical')
-print(x)
-print(y)
+# For debugging
+#x, y = spatialDataGen(2, angle=0, filename='', numTrainingPoints=5, unseenConcept='down', answerValues=('up','down'), direction='vertical')
+#print(x)
+#print(y)
