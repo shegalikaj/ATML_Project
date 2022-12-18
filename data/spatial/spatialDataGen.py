@@ -88,5 +88,7 @@ def spatialGenPointOfType(type, angle):
     rotatedMat = rotatedMat.round(2)
     rotatedMat[rotatedMat == 0] = 0
 
+    return rotatedMat
+
 spatialDataGen(2, angle=0, filename='', numTrainingPoints=5, unseenConcept='down', answerValues=('up','down'), direction='vertical')
 
