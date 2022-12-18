@@ -52,6 +52,7 @@ def generateUniqueCardinalWorldAndAnswer(f, angle, unseenConcept='', generateFor
     # Rotate the matrix by the angle provided
     rotatedMat = rotate(mat, angle=angle, reshape=True)
     rotatedMat = rotatedMat.round(2)
+    rotatedMat[rotatedMat == 0] = 0
 
     if xPos > m/2 - 0.5:
         if yPos > n/2 - 0.5:
@@ -207,5 +208,6 @@ def cardinalGenPointOfType(type, angle):
     # Rotate the matrix by the angle provided
     rotatedMat = rotate(mat, angle=angle, reshape=True)
     rotatedMat = rotatedMat.round(2)
+    rotatedMat[rotatedMat == 0] = 0
 
     return rotatedMat
