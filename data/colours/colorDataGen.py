@@ -14,9 +14,9 @@ import numpy as np
 
 
 
-fields = ['color', 'hexadecimal','R', 'G', 'B']
-df = pd.read_csv('extracted_colors.csv', usecols = fields, low_memory = True)
-df['RGB'] = list(zip(df.R, df.G, df.B))
+# fields = ['color', 'hexadecimal','R', 'G', 'B']
+# df = pd.read_csv('extracted_colors.csv', usecols = fields, low_memory = True)
+# df['RGB'] = list(zip(df.R, df.G, df.B))
 
 def rotate(point, degree): 
     # Define the rotation matrix
@@ -71,7 +71,7 @@ def check_euclidian_distance(color_1, color_2, df):
     else: 
         return False
 
-def sub_space_color_generation(seed, df, rgb_random_color, rotation_by_90_degree=False, rotation_random=False):
+def sub_space_color_generation(seed, df, rgb_random_color, rotation_by_90_degree=False, rotation_random=False,value="RGB:(255, 0, 0) Answer:red"):
     primary_secondary_colors = [ "RGB:(255, 0, 0) Answer:red",  "RGB:(0,255,0) Answer:green", "RGB:(0,0,255) Answer:blue", "RGB:(255,255,0) Answer:yellow",  "RGB:(0,255,255) Answer:cyan", "RGB:(255,0,255) Answer:magenta"]
         
     filtered_color_population = list(filter(lambda x: check_euclidian_distance(x, rgb_random_color, df), df.RGB))[:57]
