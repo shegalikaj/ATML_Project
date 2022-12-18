@@ -24,13 +24,13 @@ def cardinalDataGen(seed, angle=0, filename='', numTrainingPoints=20, unseenConc
     f = StringFileInterface(filename)
 
     for i in range(0, numTrainingPoints):
-        mat, answer = generateUniqueCardinalWorldAndAnswer(f, angle, unseenConcept, False)
+        answer, mat = generateUniqueCardinalWorldAndAnswer(f, angle, unseenConcept, False)
         f.write('\n\nWorld:\n')
         f.write(np.array2string(mat))
         f.write('\nAnswer:')
         f.write(answer)
 
-    mat, answer = generateUniqueCardinalWorldAndAnswer(f, angle, unseenConcept, True)
+    answer, mat = generateUniqueCardinalWorldAndAnswer(f, angle, unseenConcept, True)
     f.write('\n\nWorld:\n')
     f.write(np.array2string(mat))
     f.write('\nAnswer:')
@@ -173,6 +173,9 @@ def cardinalGenPointOfType(type, angle):
     else:
         raise Exception('Unsupported direction')
 
+    xPos = int(xPos)
+    yPos = int(yPos)
+
     mat = np.zeros([n, m])
     mat[yPos, xPos] = 1
 
@@ -182,3 +185,11 @@ def cardinalGenPointOfType(type, angle):
     rotatedMat[rotatedMat == 0] = 0
 
     return rotatedMat
+
+
+# For debugging
+#experiment = 2
+#num_prompts = 5
+#x,y = cardinalDataGen(experiment, angle=0, filename='', numTrainingPoints=num_prompts, unseenConcept='')
+#print(x)
+#print(y)
