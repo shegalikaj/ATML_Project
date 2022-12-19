@@ -82,7 +82,7 @@ def evaluateInModel(
 
         encoded_input = tokenizer.encode_plus(
             prompt, return_tensors='pt', max_length=4096
-        )
+        ).to(device)
 
         # Check the documentation of function generate for any change in attributes.
         # https://huggingface.co/docs/transformers/main_classes/text_generation
