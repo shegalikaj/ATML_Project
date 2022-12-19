@@ -41,7 +41,15 @@ for i in range(0, encoded_input['input_ids'].size(1), 1024):
     output_ids2.extend(batch_output[1].tolist())
     output_ids3.extend(batch_output[2].tolist())
 
+generated_sequences1 = tokenizer.decode(output_ids1, skip_special_tokens=True)
+generated_sequences2 = tokenizer.decode(output_ids2, skip_special_tokens=True)
+generated_sequences3 = tokenizer.decode(output_ids3, skip_special_tokens=True)
 
-print(tokenizer.decode(output_ids1, skip_special_tokens=True).replace(prompt, ""))
-print(tokenizer.decode(output_ids2, skip_special_tokens=True).replace(prompt, ""))
-print(tokenizer.decode(output_ids3, skip_special_tokens=True).replace(prompt, ""))
+
+#print(generated_sequences[0].replace(prompt, ""))
+#print(generated_sequences[1].replace(prompt, ""))
+#print(generated_sequences[2].replace(prompt, ""))
+
+print(generated_sequences1.split('Answer:')[-1])
+print(generated_sequences2.split('Answer:')[-1])
+print(generated_sequences3.split('Answer:')[-1])
