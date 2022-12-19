@@ -80,7 +80,7 @@ def cardinalSubspaceDataGen(seed, angle=0, filename='', numTrainingPoints=20, tr
         # Randomly choose a subspace to train
         trainSubspace = {
             random.choice(tuple(space))
-            for i in range(random.randint(0,6))
+            for i in range(random.randint(1,6))
         }
 
     # The complementary would be the subspace to test
