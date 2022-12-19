@@ -37,4 +37,10 @@ output_ids = model.generate(
     top_p=0.85,
 )
 
-disp('batman')
+generated_sequences = [
+    tokenizer.decode(s.tolist(), skip_special_tokens=True) for s in output_ids
+]
+
+print(generated_sequences[0].replace(prompt, ""))
+print(generated_sequences[1].replace(prompt, ""))
+print(generated_sequences[2].replace(prompt, ""))

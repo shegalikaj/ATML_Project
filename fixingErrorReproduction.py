@@ -17,49 +17,31 @@ prompt = "\n\nWorld:\n[[ 0.    0.    0.    0.    0.    0.  ]\n [ 0.    0.   -0.0
 
 tokenizer = GPT2Tokenizer.from_pretrained(model_to_eval[0])
 
-'''
-input_ids = tokenizer.encode(
-    prompt,
-    add_special_tokens=False,
-    return_tensors="pt",
-    max_length=3072
-).to(device)
-'''
-encoded_input = tokenizer.encode_plus(prompt, return_tensors='pt', max_length=1024)
+encoded_input = tokenizer.encode_plus(prompt, return_tensors='pt', max_length=4096)
 
 model = GPT2LMHeadModel.from_pretrained(model_to_eval[0]).to(device)
 
-'''
-output_ids = model.generate(
-    input_ids=input_ids,
-    do_sample=True,  # If False Greedy Decoding
-    # max_length=10,  # desired output sentence length
-    pad_token_id=model.config.eos_token_id,
-    max_new_tokens=5,
-    num_return_sequences=3,
-    # top_k=3,
-    temperature=1,
-    top_p=0.85,
-)
-'''
-
-output_ids = []
+output_ids1 = []
+output_ids2 = []
+output_ids3 = []
 for i in range(0, encoded_input['input_ids'].size(1), 1024):
     input_ids = encoded_input['input_ids'][:, i:i+1024]
     attention_mask = encoded_input['attention_mask'][:, i:i+1024]
     batch_output = model.generate(
         input_ids,
         attention_mask=attention_mask,
-        do_sample=True,  # If False Greedy Decoding
-        # max_length=10,  # desired output sentence length
-        pad_token_id=model.config.eos_token_id,
-        max_new_tokens=5,
+        do_sample=True,
+        #max_new_tokens=5,
         num_return_sequences=3,
-        # top_k=3,
         temperature=1,
-        top_p=0.85,
+        top_p=0.85
     )
-    output_ids.extend(batch_output[0].tolist())
+    print(batch_output.size)
+    output_ids1.extend(batch_output[0].tolist())
+    output_ids2.extend(batch_output[1].tolist())
+    output_ids3.extend(batch_output[2].tolist())
 
-response = tokenizer.decode(output_ids, skip_special_tokens=True)
-print(response)
+
+print(tokenizer.decode(output_ids1, skip_special_tokens=True).replace(prompt, ""))
+print(tokenizer.decode(output_ids2, skip_special_tokens=True).replace(prompt, ""))
+print(tokenizer.decode(output_ids3, skip_special_tokens=True).replace(prompt, ""))
