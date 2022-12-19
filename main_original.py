@@ -80,38 +80,26 @@ def evaluateInModel(
         # output = model.generate(input_ids, max_length=100, temperature=0.7, top_p=0.9, num_return_sequences=1)
         # output_text = tokenizer.decode(output[0], skip_special_tokens=True)
 
-        encoded_input = tokenizer.encode_plus(
-            prompt, return_tensors='pt', max_length=4096
-        )
+        input_ids = tokenizer.encode(
+            prompt, add_special_tokens=False, return_tensors="pt", max_length=3072
+        ).to(device)
+        # print(f"len_promt{len(prompt)}")
+        # print("input_IDS")
 
         # Check the documentation of function generate for any change in attributes.
         # https://huggingface.co/docs/transformers/main_classes/text_generation
-        output_ids1 = []
-        output_ids2 = []
-        output_ids3 = []
-        for i in range(0, encoded_input['input_ids'].size(1), 1024):
-            input_ids = encoded_input['input_ids'][:, i:i+1024]
-            attention_mask = encoded_input['attention_mask'][:, i:i+1024]
-            batch_output = model.generate(
-                input_ids,
-                attention_mask=attention_mask,
-                do_sample=True,
-                #max_new_tokens=5,
-                num_return_sequences=3,
-                temperature=1,
-                top_p=0.85
-            )
-            output_ids1.extend(batch_output[0].tolist())
-            output_ids2.extend(batch_output[1].tolist())
-            output_ids3.extend(batch_output[2].tolist())
-
-        generated_sequences1 = tokenizer.decode(output_ids1, skip_special_tokens=True)
-        generated_sequences2 = tokenizer.decode(output_ids2, skip_special_tokens=True)
-        generated_sequences3 = tokenizer.decode(output_ids3, skip_special_tokens=True)
-
-        generated_sequences = [
-            generated_sequences1, generated_sequences2, generated_sequences3
-        ]
+        output_ids = model.generate(
+            input_ids=input_ids,
+            do_sample=True,  # If False Greedy Decoding
+            # max_length=10,  # desired output sentence length
+            pad_token_id=model.config.eos_token_id,
+            max_new_tokens=5,
+            num_return_sequences=3,
+            # top_k=3,
+            temperature=1,
+            top_p=0.85,
+        )
+        # [0].tolist()
 
         # generated_text = tokenizer.decode(
         #     output_ids,
@@ -119,8 +107,8 @@ def evaluateInModel(
 
         # print("_____top3____")
         generated_sequences = [
-            generated_sequences1, generated_sequences2, generated_sequences3
-        ]
+            tokenizer.decode(s.tolist(), skip_special_tokens=True) for s in output_ids
+        ]  # clean_up_tokenization_spaces=True)
         top1, top3 = check_outputs(generated_sequences, prompt, real_ans, modelNumber)
 
     else:
@@ -138,8 +126,7 @@ def check_outputs(response, prompt, exp_ans, mod_num):
         if mod_num == 1:
             string = response["choices"][i]["text"]
         else:
-            #string = response[i].replace(prompt, "")
-            string = response[i].split('Answer:')[-1]
+            string = response[i].replace(prompt, "")
 
         string = string.replace("_", " ").replace("\n", " ").split(" ")
         # print(string)
