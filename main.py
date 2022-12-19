@@ -385,8 +385,8 @@ def run_experiment_B2(
 
         print(model_to_eval)
         if model_to_eval[1] == 0:  # GPT2 model
+            model = GPT2LMHeadModel.from_pretrained(model_to_eval[0]).to(device)
             tokenizer = GPT2Tokenizer.from_pretrained(model_to_eval[0])
-            model = GPT2LMHeadModel.from_pretrained(model_to_eval[0])
 
         else:  # model[1]==1 #GPT3 model
             model = openai.Completion
