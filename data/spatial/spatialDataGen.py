@@ -58,7 +58,7 @@ def generateUniqueSpatialWorldAndAnswer(f, angle, answerValues, unseenConcept=''
     # Recursively call and return function if:
     # rotatedMat is already present in 'f.data'
     if (np.array2string(rotatedMat) in f.data):
-        return generateUniqueSpatialWorldAndAnswer(f, angle, unseenConcept, generateForUnseenConcept)
+        return generateUniqueSpatialWorldAndAnswer(f, angle, answerValues, unseenConcept, generateForUnseenConcept)
 
     answer = answerValues[answerIndex]
 
