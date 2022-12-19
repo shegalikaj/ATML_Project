@@ -96,8 +96,8 @@ def cardinalSubspaceDataGen(seed, angle=0, filename='', numTrainingPoints=20, tr
         f.write(answer)
 
     # Sample one point of type 'testSubspace'
-    answer = random.choice(tuple(testSubspace), angle)
-    mat = cardinalGenPointOfType(answer)
+    answer = random.choice(tuple(testSubspace))
+    mat = cardinalGenPointOfType(answer, angle)
     f.write('\n\nWorld:\n')
     f.write(np.array2string(mat))
     f.write('\nAnswer:')
