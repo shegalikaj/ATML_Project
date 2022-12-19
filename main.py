@@ -81,7 +81,7 @@ def evaluateInModel(
         # output_text = tokenizer.decode(output[0], skip_special_tokens=True)
 
         encoded_input = tokenizer.encode_plus(
-            prompt, return_tensors='pt', max_length=4096
+            prompt, return_tensors='pt', max_length=16384
         ).to(device)
 
         # Check the documentation of function generate for any change in attributes.
@@ -381,12 +381,15 @@ def run_experiment_B2(
         "northwest",
     ]
 
+
     for k, model_to_eval in enumerate(models):
+
+        j=0
 
         print(model_to_eval)
         if model_to_eval[1] == 0:  # GPT2 model
-            model = GPT2LMHeadModel.from_pretrained(model_to_eval[0]).to(device)
             tokenizer = GPT2Tokenizer.from_pretrained(model_to_eval[0])
+            model = GPT2LMHeadModel.from_pretrained(model_to_eval[0]).to(device)
 
         else:  # model[1]==1 #GPT3 model
             model = openai.Completion
@@ -399,15 +402,14 @@ def run_experiment_B2(
                 for rotation in rotation_list:
 
                     for experiment in range(numTimesRepeatExperiment):
+ 
                         set_seed(experiment)
-
+                        print(experiment)
                         list_ans = []
+                        prompt=""
 
                         if type_exp == "grid":
                             if gtu == "world":
-                                print(
-                                    f"tyep: {type_exp} , {gtu} ,model: {model_to_eval[0]},exp: {experiment}, rotation:{rotation}"
-                                )
                                 for pos in positions:  # B2.1
                                     if rotation == "None":
                                         # def spatialDataGen(seed, angle=0, filename='', numTrainingPoints=20, unseenConcept='', answerValues=('left', 'right'), direction='horizontal'):
@@ -421,9 +423,7 @@ def run_experiment_B2(
                                             answerValues=pos[0],
                                             direction=pos[1],
                                         )
-                                        # print(len(prompt))
-                                        # print(prompt)
-                                        # print(expectedAnswer)
+
                                     elif rotation == "90":
                                         (prompt, expectedAnswer) = spatialDataGen(
                                             experiment,
@@ -444,16 +444,11 @@ def run_experiment_B2(
                                             answerValues=pos[0],
                                             direction=pos[1],
                                         )
-                                        # print(len(prompt))
-                                        # print(prompt)
-                                        # print(expectedAnswer)
+
 
                                     list_ans.append([prompt, expectedAnswer])
 
                             elif gtu == "concept":  # B2.1
-                                print(
-                                    f"tyep: {type_exp} , {gtu} ,model: {model_to_eval[0]},exp: {experiment}, rotation:{rotation}"
-                                )
                                 for pos in positions:  # B2.1
                                     for i in range(2):
                                         if rotation == "None":
@@ -489,10 +484,7 @@ def run_experiment_B2(
 
                                         list_ans.append([prompt, expectedAnswer])
 
-                        if type_exp == "cardinal":
-                            print(
-                                f"tyep: {type_exp} , {gtu} ,model: {model_to_eval[0]},exp: {experiment}, rotation:{rotation}"
-                            )
+                        elif type_exp == "cardinal":
                             if gtu == "world":
                                 if rotation == "None":
                                     prompt, expectedAnswer = cardinalDataGen(
@@ -524,7 +516,6 @@ def run_experiment_B2(
                             if gtu == "concept":
 
                                 for i in range(len(cardinal_space)):
-                                    print("AQUI ando")
 
                                     if rotation == "None":
                                         prompt, expectedAnswer = cardinalDataGen(
@@ -623,70 +614,74 @@ def run_experiment_B2(
                                     )
                                 list_ans.append([prompt, expectedAnswer])
 
-                    # experiment
-                    # print("+++++++++START++++++++++++++++++++++++")
-                    start = time.time()
-                    # print(prompt)
-                    # print(expectedAnswer)
-                    print(
-                        f"tyep: {type_exp} , {gtu} ,model: {model_to_eval[0]},exp: {experiment}, rotation:{rotation}len:{len(prompt)} "
-                    )
-
-                    # print(list_ans)
-                    if len(list_ans) != 0:
-
-                        top1_ = 0
-                        top3_ = 0
-                        top1_corr = 0
-                        top3_corr = 0
-                        len_ans = len(list_ans)
-                        for ans in list_ans:
-                            # print("prompt")
-                            # print(ans[0])
-                            # print(f"{ans[2]}")
-                            # print("")
-                            top1_, top3_ = evaluateInModel(
-                                model_to_eval[1], model, ans[0], ans[1], tokenizer
-                            )
-                            top1_corr = top1_corr + top1_
-                            top3_corr = top3_corr + top3_
-                            end = time.time()
-                        # index.append((name, instance.best_sol , opt2_ , s_  , q0_str  ))
-                        # print(f"Accuracy top1:{top1_/len_ans}, top2:{top3_/len_ans} time:{end - start}")
-                        # print(f"==========time{end - start}=====================")
-                        row = [
-                            type_exp,
-                            f"GTU {gtu}",
-                            model_to_eval[0],
-                            rotation,
-                            top1_ / len_ans,
-                            top3_ / len_ans,
-                            end - start,
-                        ]
-                        print(row)
-                        # with open('/content/drive/MyDrive/ATMLData/color_experiment', 'a') as f:#
-                        with open("./data/spa_car_exp.csv", "a") as f:
-                            # create the csv writer
-                            writer = csv.writer(f)
-                            # write a row to the csv file
-                            writer.writerow(row)
-                            # close the file
-                            f.close()
-                    else:
+                        # experiment
+                        # print("+++++++++START++++++++++++++++++++++++")
+                        start = time.time()
+                        # print(prompt)
+                        # print(expectedAnswer)
                         print(
-                            f"No test tyep: {type_exp} , {gtu} ,model: {model_to_eval[0]},exp: {experiment}, rotation:{rotation}"
+                            f"tyep: {type_exp} , {gtu} ,model: {model_to_eval[0]},exp: {experiment}, rotation: {rotation} len: {len(prompt)} j: {j} "
                         )
+
+                        # print(list_ans)
+                        if len(list_ans) != 0:
+
+                            j=j+1
+
+                            top1_ = 0
+                            top3_ = 0
+                            top1_corr = 0
+                            top3_corr = 0
+                            len_ans = len(list_ans)
+                            for ans in list_ans:
+                                # print("prompt")
+                                # print(ans[0])
+                                # print(f"{ans[2]}")
+                                # print("")
+                                time.sleep(1)
+                                top1_, top3_ = evaluateInModel(
+                                    model_to_eval[1], model, ans[0], ans[1], tokenizer
+                                )
+                                top1_corr = top1_corr + top1_
+                                top3_corr = top3_corr + top3_
+                                end = time.time()
+                            # index.append((name, instance.best_sol , opt2_ , s_  , q0_str  ))
+                            # print(f"Accuracy top1:{top1_/len_ans}, top2:{top3_/len_ans} time:{end - start}")
+                            # print(f"==========time{end - start}=====================")
+                            row = [
+                                type_exp,
+                                f"GTU {gtu}",
+                                model_to_eval[0],
+                                rotation,
+                                top1_ / len_ans,
+                                top3_ / len_ans,
+                                end - start,
+                            ]
+                            print(row)
+                            # with open('/content/drive/MyDrive/ATMLData/color_experiment', 'a') as f:#
+                            with open('./data/spatial_experiment.csv', "a") as f:
+                                # create the csv writer
+                                writer = csv.writer(f)
+                                # write a row to the csv file
+                                writer.writerow(row)
+                                # close the file
+                                f.close()
+                        else:
+                            print(
+                                f"No test type: {type_exp} , {gtu} ,model: {model_to_eval[0]},exp: {experiment}, rotation:{rotation}"
+                            )
+
+
 
 
 # run_experiment(numTimesRepeatExperiment,models,["color"])
 # run_experiment_B1(numTimesRepeatExperiment,models)
 # models =  [("gpt2",0),("gpt2-medium",0),("gpt2-large",0),("gpt2-xl",0),("gpt3",1)]
 models = [("gpt2", 0)]
-numTimesRepeatExperiment = 1
+numTimesRepeatExperiment = 100
 # spatialDataGen(2, angle=0, filename='', numTrainingPoints=5, unseenConcept='down', answerValues=('up','down'), direction='vertical')
 run_experiment_B2(
     numTimesRepeatExperiment,
     models,
-    type_expermients=["grid", "cardinal"],
-    num_prompts=5,
-)
+    type_expermients=["grid"],#, "cardinal"],
+    num_prompts=20)
