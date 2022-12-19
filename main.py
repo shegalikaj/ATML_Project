@@ -90,8 +90,8 @@ def evaluateInModel(
         output_ids2 = []
         output_ids3 = []
         for i in range(0, encoded_input['input_ids'].size(1), 1024):
-            input_ids = encoded_input['input_ids'][:, i:i+1024]
-            attention_mask = encoded_input['attention_mask'][:, i:i+1024]
+            input_ids = encoded_input['input_ids'][:, i:i+1024].to(device)
+            attention_mask = encoded_input['attention_mask'][:, i:i+1024].to(device)
             batch_output = model.generate(
                 input_ids,
                 attention_mask=attention_mask,
