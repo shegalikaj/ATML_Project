@@ -27,7 +27,7 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 numModels = 5
 numTimesRepeatExperiment = 1
-# models = (("gpt2",0),("gpt2-medium",0),("gpt2-large",0),("gpt2-xl",0),("gpt3",1))
+
 models = [
     ("gpt2", 0),
     ("gpt2-medium", 0),
@@ -35,8 +35,6 @@ models = [
     ("gpt2-xl", 0),
     ("gpt3", 1),
 ]
-print("Experiments to text")
-print(models)
 
 fields = ["color", "hexadecimal", "R", "G", "B"]
 
@@ -76,10 +74,6 @@ def evaluateInModel(
         # print(prompt)
 
         # Generate some text using the model
-        # input_ids = torch.tensor(tokenizer.encode(prompt, return_tensors='pt')).to(device)
-        # output = model.generate(input_ids, max_length=100, temperature=0.7, top_p=0.9, num_return_sequences=1)
-        # output_text = tokenizer.decode(output[0], skip_special_tokens=True)
-
         encoded_input = tokenizer.encode_plus(
             prompt, return_tensors='pt', max_length=16384
         ).to(device)
@@ -187,10 +181,6 @@ def check_outputs(response, prompt, exp_ans, mod_num):
                 return top1, top3
 
     return top1, top3
-
-
-# #(prompt, expectedAnswer) = spatialDataGen(1)
-# #print(prompt)
 
 
 def run_experiment_B1(numTimesRepeatExperiment, models):
@@ -402,7 +392,7 @@ def run_experiment_B2(
                 for rotation in rotation_list:
 
                     for experiment in range(numTimesRepeatExperiment):
- 
+
                         set_seed(experiment)
                         print(experiment)
                         list_ans = []
