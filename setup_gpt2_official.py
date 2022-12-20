@@ -1,3 +1,5 @@
+# NOTE: We ended up using HuggingFace's 'transformer' library, which was available in 'pip' instead of the following.
+
 import os
 
 os.system('git clone https://github.com/openai/gpt-2.git')
