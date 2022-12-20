@@ -10,7 +10,7 @@ import torch
 from transformers import GPT2LMHeadModel, GPT2Tokenizer, set_seed
 import sys
 
-openai.api_key = ""
+openai.api_key = os.environ["OPENAI_API_KEY"]
 
 sys.path.append("./data/cardinal")
 sys.path.append("./data/spatial")
@@ -26,7 +26,7 @@ from data.colours.colorDataGen import (
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 numModels = 5
-numTimesRepeatExperiment = 1
+numTimesRepeatExperiment = 100
 
 models = [
     ("gpt2", 0),
@@ -662,16 +662,13 @@ def run_experiment_B2(
                             )
 
 
-
+### Run the experiments
 
 # run_experiment(numTimesRepeatExperiment,models,["color"])
-# run_experiment_B1(numTimesRepeatExperiment,models)
-# models =  [("gpt2",0),("gpt2-medium",0),("gpt2-large",0),("gpt2-xl",0),("gpt3",1)]
-models = [("gpt2", 0)]
-numTimesRepeatExperiment = 100
-# spatialDataGen(2, angle=0, filename='', numTrainingPoints=5, unseenConcept='down', answerValues=('up','down'), direction='vertical')
+run_experiment_B1(numTimesRepeatExperiment, models)
 run_experiment_B2(
     numTimesRepeatExperiment,
     models,
     type_expermients=["grid"],#, "cardinal"],
-    num_prompts=20)
+    num_prompts=20
+)
